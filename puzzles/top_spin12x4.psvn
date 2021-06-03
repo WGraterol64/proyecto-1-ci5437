@@ -1,0 +1,33 @@
+# TopSpin is a commercial puzzle made by Binary Arts. There is a circular ring 
+# of N tokens from 0 to N-1 and a special section of the ring (the "turntable" or 
+# "turnstile") of length K that can be "spun" to reverse the order of the K tokens
+# in it. In this case, N = 12 and K = 4. In the physical puzzle, the ring of tokens 
+# has to be rotated to get the token you want to reverse into the turntable. In 
+# most computer encodings (including the ones here), the rotation of the ring is 
+# not counted as a move, any K adjacent locations can be rotated, including locations
+# that are adjacent by "wrapping around" from the end of the vector to the beginning, 
+# e.g. there is an operator that reverses the tokens in location ..., N-1, 0, 1, ... 
+# Because only the circular order of the tokens matters, in this encoding there are 
+# 12 goal states which differ only in their cyclic rotation.
+
+# Domain called "token" consisting of 12 constants. 
+DOMAIN token 12 
+0 1 2 3 4 5 6 7 8 9 10 11 
+
+# A state is a vector of length 12 
+12 token token token token token token token token token token token token 
+
+X0 X1 X2 X3 -  -  -  -  -  -  -  -   =>  X3 X2 X1 X0 -  -  -  -  -  -  -  -    LABEL R0_3 
+-  X0 X1 X2 X3 -  -  -  -  -  -  -   =>  -  X3 X2 X1 X0 -  -  -  -  -  -  -    LABEL R1_4 
+-  -  X0 X1 X2 X3 -  -  -  -  -  -   =>  -  -  X3 X2 X1 X0 -  -  -  -  -  -    LABEL R2_5 
+-  -  -  X0 X1 X2 X3 -  -  -  -  -   =>  -  -  -  X3 X2 X1 X0 -  -  -  -  -    LABEL R3_6 
+-  -  -  -  X0 X1 X2 X3 -  -  -  -   =>  -  -  -  -  X3 X2 X1 X0 -  -  -  -    LABEL R4_7 
+-  -  -  -  -  X0 X1 X2 X3 -  -  -   =>  -  -  -  -  -  X3 X2 X1 X0 -  -  -    LABEL R5_8 
+-  -  -  -  -  -  X0 X1 X2 X3 -  -   =>  -  -  -  -  -  -  X3 X2 X1 X0 -  -    LABEL R6_9 
+-  -  -  -  -  -  -  X0 X1 X2 X3 -   =>  -  -  -  -  -  -  -  X3 X2 X1 X0 -    LABEL R7_10 
+-  -  -  -  -  -  -  -  X0 X1 X2 X3  =>  -  -  -  -  -  -  -  -  X3 X2 X1 X0   LABEL R8_11 
+X3 -  -  -  -  -  -  -  -  X0 X1 X2  =>  X0 -  -  -  -  -  -  -  -  X3 X2 X1   LABEL R9_0 
+X2 X3 -  -  -  -  -  -  -  -  X0 X1  =>  X1 X0 -  -  -  -  -  -  -  -  X3 X2   LABEL R10_1 
+X1 X2 X3 -  -  -  -  -  -  -  -  X0  =>  X2 X1 X0 -  -  -  -  -  -  -  -  X3   LABEL R11_2 
+
+GOAL 0 1 2 3 4 5 6 7 8 9 10 11 
