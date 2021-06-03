@@ -1,11 +1,12 @@
 #include "Node.hpp"
 
 /* Constructor. */
-Node::Node(state_t *state, Node *parent, int rule_id, int g) {
+Node::Node(state_t *state, Node *parent, int rule_id, int g, long unsigned int d) {
   this->state = state;
   this->parent = parent;
   this->rule_id = rule_id;
   this->g = g;
+  this->d = d;
 }
 
 /* Destructor. */
@@ -39,5 +40,5 @@ OUTPUT:
   Node* =>  Nuevo nodo.
 */
 Node* Node::make_node(state_t *state, int rule_id) {
-  return new Node(state, this, rule_id, this->g + get_fwd_rule_cost(rule_id));
+  return new Node(state, this, rule_id, this->g + get_fwd_rule_cost(rule_id), this->d+1);
 }
