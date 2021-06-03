@@ -4,12 +4,12 @@
 #include <set>
 #include <map>
 #include "Node.hpp"
-#include "NodesPriorityQueue.hpp"
+#include "PriorityQueue.hpp"
 
 using namespace std;
 
 /*
-Busqueda de mejor camino.
+Busqueda de mejor camino con eliminacion tardia de duplicados.
 
 INPUTS:
   state_t *s_init   =>  Estado inicial de la busqueda.
@@ -20,47 +20,50 @@ OUTPUT:
   Node* =>  Nodo que contiene la solucion. NULL si no hay solucion.
 */
 Node *best_first_search(state_t *s_init, int (*f) (Node*)) {
-  // En frontier almacenaremos los nodos que representan los estados a explorar
+  // En q almacenaremos los nodos que representan los estados a explorar
   // ordenados segun f. Primero agregamos el estado inicial.
-  NodesPriorityQueue frontier = NodesPriorityQueue(f);
+  PriorityQueue<int, Node*> q = PriorityQueue<int, Node*>(f);
   Node* node = new Node(s_init);
-  frontier.add(node);
-  // En explored almacenaremos los nodos visitados
-  set<uint64_t> explored;
-  vector<pair<state_t*, int>> *successors;
-  Node* child;
+  q.add(node);
+
+  // En explored almacenaremos los nodos visitados, su color y su costo parcial.
+  map<uint64_t, int> explored;
+  
   // Variables para iterar a traves de los sucesores de un determinado estado.
+  vector<pair<state_t*, int>> *successors;
   state_t *succ;
+  Node *child;
   ruleid_iterator_t iter;
+  uint64_t hash_value;
   int ruleid;
 
-  while (1) {
-    // Si frontier se queda vacio, no hay solucion.
-    if (frontier.empty()) return NULL;
-    // Obtenemos el siguiente nodo y verificamos si es solucion.
-    node = frontier.pop();
-    if (is_goal(node->state)) return node;
-    explored.insert(hash_state(node->state));
+  while (! q.empty()) {
+    node = q.pop();
+    hash_value = hash_state(node->state);
 
-    // Inicializamos el iterador de sucesores.
-    init_fwd_iter(&iter, node->state);
-    while((ruleid = next_ruleid(&iter)) >= 0) {
+    // Si el estado actual no ha sido visitado o su costo parcial es menor que el 
+    // almacenado en explored.
+    if (explored.count(hash_value) == 0 || node->g < explored[hash_value]) {
+      if (is_goal(node->state)) return node;
+      explored[hash_value] = node->g;
 
-      // Obtenemos el siguiente sucesor.
-      succ = new state_t;
-      apply_fwd_rule(ruleid, node->state, succ);
-      // Creamos el nodo hijo.
-      child = node->make_node(succ, ruleid);
+      // Inicializamos el iterador de sucesores.
+      init_fwd_iter(&iter, node->state);
+      while((ruleid = next_ruleid(&iter)) >= 0) {
+        // Obtenemos el siguiente sucesor y creamos el nodo hijo.
+        succ = new state_t;
+        apply_fwd_rule(ruleid, node->state, succ);
+        child = node->make_node(succ, ruleid);
 
-      // Si no lo hemos visto lo agregamos al frontier.
-      if (explored.count(hash_state(child->state)) == 0 && ! frontier.find(child)) {
-        frontier.add(child);
-      // En cambio, si es encuentra en el frontier con un costo mayor, lo sustituimos.
-      } else if (frontier.find(child)) {
-        frontier.replace_if_less(child);
+        // Si el costo del nodo hijo no es "infinito", lo agregamos a la cola.
+        if (f(child) < INT_MAX) {
+          q.add(child);
+        } 
       }
     }
   }
+  // No hay solucion.
+  return NULL;
 }
 
 /*
