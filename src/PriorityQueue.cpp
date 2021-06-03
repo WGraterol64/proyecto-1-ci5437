@@ -46,5 +46,3 @@ E PriorityQueue<C, E>::pop(void) {
   this->ordered_elems.erase(it);
   return (*it).second;
 }
-
-int main(){return 0;}
