@@ -6,7 +6,7 @@ PSVNOPT = --no_state_map --no_abstraction --no_backwards_moves --history_len=0
 
 %.out: %.c src/*.cpp
 	cd src; $(CXX) $(OPT2) *.cpp -include $< -o ../bin/$@ || rm -rf *.c
-	rm -f src/$*.c
+	make clean
 	
 %.c: %.psvn psvn/bin/psvn2c psvn2c_core.c psvn2c_state_map.c psvn2c_abstraction.c
 	cd src; ../psvn/bin/psvn2c $(PSVNOPT) --name=$(*F) < ../$< > $@
@@ -25,4 +25,7 @@ psvn2c_abstraction.c:
 	cp psvn/src/psvn2c_abstraction.c src/psvn2c_abstraction.c
 
 .PRECIOUS: %.c
+
+clean:
+	rm -f src/$*.c
 
