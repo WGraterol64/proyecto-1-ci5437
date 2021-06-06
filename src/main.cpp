@@ -62,20 +62,20 @@ int main(void) {
   }
   cout << "\n\n";
   opt = atoi(str);
-  if (opt < 6) {
+  if (opt < 6 && opt != 4) {
     
     Node* solution;
     switch(opt) {
       case 1: solution = best_first_search(s_init, f); break;
       case 2: solution = best_first_search_dup_pruning(s_init, f); break;
       case 3: solution = best_first_search_late_dup_pruning(s_init, f); break;
-      case 4:
       case 5: solution = ida_dup_pruning(s_init, h); break;
       default:
         printf("Error: input invalido.\n");
         exit(1); 
     }
 
+    // Imprimimos la solucion.
     if (solution != NULL) {
       cout << "Solution: [";
       vector<int> rules = solution->extract_path();
@@ -85,17 +85,22 @@ int main(void) {
       cout << "]\n";
     }
 
-  } else if (opt == 6) {
-    cout << "Solution: [";
-    vector<int> rules = ida_part_dup_pruning(s_init, h);
-    for (vector<int>::iterator it = rules.begin(); it != rules.end(); it++) {
-      cout << get_fwd_rule_label(*it) << "\n";
-    }
-    cout << "]\n";
   } else {
-    printf("Error: input invalido.\n");
-    exit(1); 
-  }
+
+    vector<int> rules;
+    switch(opt) {
+      case 4: rules = ida(s_init, h, false); break;
+      case 6: rules = ida(s_init, h, true); break;
+      default:
+        printf("Error: input invalido.\n");
+        exit(1); 
+    }
+
+    // Imprimimos la longitud de la solucion.
+    if (! rules.empty()) {
+      cout << "Solution size: " << rules.size() << "\n";
+    }
+  } 
 
   return 0;
 }

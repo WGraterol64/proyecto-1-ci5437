@@ -23,7 +23,7 @@ Node *best_first_search(
   unsigned (*f) (Node*)
 );
 
-// Busqueda de mejor camino con eliminacion tardia de duplicados.
+// Busqueda de mejor camino con eliminacion de duplicados.
 Node *best_first_search_dup_pruning(
   state_t *s_init, 
   unsigned (*f) (Node*)
@@ -35,14 +35,15 @@ Node *best_first_search_late_dup_pruning(
   unsigned (*f) (Node*)
 );
 
-// Implementacion del algoritmo IDA* con eliminacion de duplicados.
-Node *ida_dup_pruning(
+// Implementacion del algoritmo IDA*.
+vector<int> ida(
   state_t *s_init, 
-  unsigned (*h) (state_t*)
+  unsigned (*h) (state_t*),
+  bool part_pruning
 );
 
-// Implementacion del algoritmo IDA* con eliminacion parcial de duplicados.
-vector<int> ida_part_dup_pruning(
+// Implementacion del algoritmo IDA* con eliminacion de duplicados.
+Node *ida_dup_pruning(
   state_t *s_init, 
   unsigned (*h) (state_t*)
 );

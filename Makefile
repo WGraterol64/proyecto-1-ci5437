@@ -2,7 +2,7 @@ CC = gcc
 CXX = g++
 OPT1 = -g -Wall -O3
 OPT2 = -Wall -O3 -Wno-unused-function -Wno-unused-variable
-PSVNOPT = --no_state_map --no_abstraction --history_len=0
+PSVNOPT = --no_state_map --no_abstraction --history_len=2
 
 %:
 	(cp puzzles/$*.psvn . && make $*.out && rm $*.psvn) || (echo -e "\n\e[1;31mError. \e[0mCompilation termined." && exit 1)

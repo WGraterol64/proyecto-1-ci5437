@@ -310,6 +310,7 @@ Node *best_first_search_late_dup_pruning(
       // Inicializamos el iterador de sucesores.
       init_fwd_iter(&iter, node->state);
       while((ruleid = next_ruleid(&iter)) >= 0) {
+
         // Obtenemos el siguiente sucesor y creamos el nodo hijo.
         succ = new state_t;
         apply_fwd_rule(ruleid, node->state, succ);
@@ -333,6 +334,141 @@ Node *best_first_search_late_dup_pruning(
   return NULL;
 }
 
+
+
+/*
+  Implementacion de la busqueda en profundida de IDA*.
+
+  INPUTS:
+    unsigned bound            =>  Limite en el valor de un estado (costo + heuristica).
+    unsigned g                =>  Costo del camino hasta el estado actual.
+    unsigned d                =>  Profundidad.
+    unsigned (*h) (state_t*)  =>  Heuristica.
+    bool part_pruning         =>  Indica si se usara eliminacion parcial de duplicados.
+  OUTPUT:
+    pair<bool, int>  =>  El booleano indica si se encontro la solucion e int indica la cota
+          obtenida en esta iteracion.
+*/
+pair<bool, unsigned> ida_search(
+    unsigned bound, 
+    unsigned g,
+    unsigned d,
+    unsigned (*h) (state_t*),
+    bool part_pruning,
+    int history
+) {
+  // Actualizamos el conteo de nodos.
+  if (visited->size() <= d) visited->push_back(1);
+  else (*visited)[d]++;
+
+  unsigned h_value = h(state);
+  unsigned f_value = g + h_value;
+  if (f_value > bound) return {false, f_value};
+  if (h_value == 0) return {true, f_value};
+
+  unsigned t = UINT_MAX;
+
+  // Para eliminacion parcial de duplicados.
+  int child_hist;
+
+  // Variables para iterar a traves de los sucesores de un determinado estado.
+  ruleid_iterator_t iter;
+  int ruleid;
+  pair<bool, unsigned> p;
+
+  init_fwd_iter(&iter, state);
+  while((ruleid = next_ruleid(&iter)) >= 0) {
+    // Eliminacion parcial de duplicados.
+    if (part_pruning) {
+      if (! fwd_rule_valid_for_history(history, ruleid)) continue;
+      child_hist = next_fwd_history(history, ruleid);
+    } else {
+      child_hist = 0;
+    }
+
+    // Aplicamos la regla.
+    apply_rule(ruleid, state);
+
+    if (h(state) < UINT_MAX) {
+      // Agregamos la regla al path.
+      path.push_back(ruleid);
+      p = ida_search(bound, g + get_fwd_rule_cost(ruleid), d+1, h, part_pruning, child_hist);
+      if (p.first) return p;
+
+      if (p.second < t) t = p.second;
+      // Si no conseguimos una solucion, sacamos la regla del path.
+      path.pop_back();
+    }
+
+    // Si no conseguimos una solucion, regresamos al estado anterior.
+    revert_rule(ruleid, state);
+  }
+  return {false, t};
+}
+
+/* 
+  Implementacion del algoritmo IDA*.
+
+  INPUTS:
+    state_t *s_init           =>  Estado inicial del problema.
+    unsigned (*h) (state_t*)  =>  Heuristica.
+    bool part_pruning         =>  Indica si se usara eliminacion parcial de duplicados.
+  OUTPUT:
+    vector<int> => Lista de acciones necesarias para alcanzar la meta. 
+*/
+vector<int> ida(
+    state_t *s_init, 
+    unsigned (*h) (state_t*),
+    bool part_pruning
+) {
+  // Imprimimos la memoria virtual inicial.
+  cout << "Initial memory: ";
+  print_memory_used();
+  // Iniciamos el conteo del tiempo.
+  start = clock();
+
+  state = s_init;
+  unsigned bound = h(state);
+  pair<bool, unsigned> p;
+
+  // Para eliminacion parcial de duplicados
+  int hist = init_history;
+
+  cout << "Thresholds: ";
+  fflush(stdout);
+
+  // Mientras nuestra cota no sea "infinita"/
+  while (bound != UINT_MAX) {
+    // Imprimimos la cota actual.
+    cout << bound << " ";
+    fflush(stdout);
+
+    p = ida_search(bound, 0, 0, h, part_pruning, hist);
+
+    if (p.first) {
+      // Imprimimos la cantidad de nodos expandidos por profundidad y la 
+      // memoria virtual usada.
+      cout << "\n";
+      print_time();
+      cout << "Final memory: ";
+      print_memory_used();
+      print_visited();
+      return path;
+    }
+    bound = p.second;
+  }
+
+  // Imprimimos la cantidad de nodos expandidos por profundidad y la 
+  // memoria virtual usada.
+  cout << "\n";
+  print_time();
+  cout << "Final memory: ";
+  print_memory_used();
+  print_visited();
+  cout << "No hay solucion.\n";
+  path.clear();
+  return path;
+}
 
 
 /*
@@ -428,7 +564,7 @@ Node *ida_dup_pruning(
 
   pair<Node*, unsigned> t;
 
-  cout << "\nTHRESHOLDS: ";
+  cout << "Thresholds: ";
   fflush(stdout);
 
   while (bound != UINT_MAX) {
@@ -465,122 +601,3 @@ Node *ida_dup_pruning(
 
 
 
-/*
-  Implementacion de la busqueda en profundida de IDA* con eliminacion parcial de duplicados.
-
-  INPUTS:
-    unsigned bound            =>  Limite en el valor de un estado (costo + heuristica).
-    unsigned g                =>  Costo del camino hasta el estado actual.
-    unsigned d                =>  Profundidad.
-    unsigned (*h) (state_t*)  =>  Heuristica.
-  OUTPUT:
-    pair<bool, int>  =>  El booleano indica si se encontro la solucion e int indica la cota
-          obtenida en esta iteracion.
-*/
-pair<bool, unsigned> ida_search_part_dup_pruning(
-    unsigned bound, 
-    unsigned g,
-    unsigned d,
-    unsigned (*h) (state_t*)
-) {
-  // Actualizamos el conteo de nodos.
-  if (visited->size() <= d) visited->push_back(1);
-  else (*visited)[d]++;
-
-  unsigned h_value = h(state);
-  unsigned f_value = g + h_value;
-  if (f_value > bound) return {false, f_value};
-  if (h_value == 0) return {true, f_value};
-
-  unsigned t = UINT_MAX;
-
-  // Variables para iterar a traves de los sucesores de un determinado estado.
-  ruleid_iterator_t iter;
-  int ruleid;
-  pair<bool, unsigned> p;
-
-  init_fwd_iter(&iter, state);
-  while((ruleid = next_ruleid(&iter)) >= 0) {
-    // Eliminacion parcial de duplicados.
-    //if( fwd_rule_valid_for_history(history, ruleid) == 0 ) continue;
-
-    // Aplicamos la regla.
-    apply_rule(ruleid, state);
-
-    if (h(state) < UINT_MAX) {
-      // Agregamos la regla al path.
-      path.push_back(ruleid);
-      p = ida_search_part_dup_pruning(bound, g + get_fwd_rule_cost(ruleid), d+1, h);
-      if (p.first) return p;
-
-      if (p.second < t) t = p.second;
-      // Si no conseguimos una solucion, sacamos la regla del path.
-      path.pop_back();
-    }
-
-    // Si no conseguimos una solucion, regresamos al estado anterior.
-    revert_rule(ruleid, state);
-  }
-  return {false, t};
-}
-
-/* 
-  Implementacion del algoritmo IDA* con eliminacion parcial de duplicados.
-
-  INPUTS:
-    state_t *s_init           =>  Estado inicial del problema.
-    unsigned (*h) (state_t*)  =>  Heuristica.
-    vector<unsigned> *visited =>  Lista que cuenta el numero de estados visitados 
-        por nivel de profundidad.
-  OUTPUT:
-    vector<int> => Lista de acciones necesarias para alcanzar la meta. 
-*/
-vector<int> ida_part_dup_pruning(
-    state_t *s_init, 
-    unsigned (*h) (state_t*)
-) {
-  // Imprimimos la memoria virtual inicial.
-  cout << "Initial memory: ";
-  print_memory_used();
-  // Iniciamos el conteo del tiempo.
-  start = clock();
-
-  state = s_init;
-  unsigned bound = h(state);
-  pair<bool, unsigned> p;
-
-  cout << "\nTHRESHOLDS: ";
-  fflush(stdout);
-
-  // Mientras nuestra cota no sea "infinita"/
-  while (bound != UINT_MAX) {
-    // Imprimimos la cota actual.
-    cout << bound << " ";
-    fflush(stdout);
-
-    p = ida_search_part_dup_pruning(bound, 0, 0, h);
-
-    if (p.first) {
-      // Imprimimos la cantidad de nodos expandidos por profundidad y la 
-      // memoria virtual usada.
-      cout << "\n";
-      print_time();
-      cout << "Final memory: ";
-      print_memory_used();
-      print_visited();
-      return path;
-    }
-    bound = p.second;
-  }
-
-  // Imprimimos la cantidad de nodos expandidos por profundidad y la 
-  // memoria virtual usada.
-  cout << "\n";
-  print_time();
-  cout << "Final memory: ";
-  print_memory_used();
-  print_visited();
-  cout << "No hay solucion.\n";
-  path.clear();
-  return path;
-}
