@@ -7,6 +7,8 @@ vector<unsigned> *visited = new vector<unsigned>;
 state_t *state;
 // Camino de acciones necesarios para pasar del estado inicial al estado global.
 vector<int> path;
+// Usada para medir el tiempo de ejecucion
+clock_t start;
 
 
 
@@ -34,7 +36,17 @@ void print_memory_used(void) {
   //Add other values in next statement to avoid int overflow on right hand side...
   virtualMemUsed += memInfo.totalswap - memInfo.freeswap;
   virtualMemUsed *= memInfo.mem_unit;
-  cout << "Memory used: " << virtualMemUsed / (1024*1024*1024) << "Gb\n";
+  cout << virtualMemUsed / (1024*1024*1024) << " Gb\n";
+}
+
+/*
+  Imprime el tiempo de ejecucion segun la variables globales start y end.
+*/
+void print_time(void) {
+  // Calculating total time taken by the program.
+  double time_taken = double(clock() - start) / double(CLOCKS_PER_SEC);
+  cout << "Time: " << fixed << time_taken << setprecision(5);
+  cout << " seconds\n";
 }
 
 /*
@@ -80,7 +92,10 @@ Node *best_first_search(
     unsigned (*f) (Node*)
 ) {
   // Imprimimos la memoria virtual inicial.
+  cout << "Initial memory: ";
   print_memory_used();
+  // Iniciamos el conteo del tiempo.
+  start = clock();
 
   // En q almacenaremos los nodos que representan los estados a explorar
   // ordenados segun f. Primero agregamos el estado inicial.
@@ -93,11 +108,13 @@ Node *best_first_search(
   ruleid_iterator_t iter;
   int ruleid;
 
-  while (1) {
+  while (true) {
     // Si q se queda vacio, no hay solucion.
     if (q.empty()) {
       // Imprimimos la cantidad de nodos expandidos por profundidad y la 
       // memoria virtual usada.
+      print_time();
+      cout << "Final memory: ";
       print_memory_used();
       print_visited();
       cout << "No hay solucion.\n";
@@ -113,6 +130,11 @@ Node *best_first_search(
 
     // Verificamos si es solucion.
     if (is_goal(node->state)) {
+      // Imprimimos la cantidad de nodos expandidos por profundidad y la 
+      // memoria virtual usada.
+      print_time();
+      cout << "Final memory: ";
+      print_memory_used();
       print_visited();
       return node;
     }
@@ -147,7 +169,10 @@ Node *best_first_search_dup_pruning(
     unsigned (*f) (Node*)
 ) {
   // Imprimimos la memoria virtual inicial.
+  cout << "Initial memory: ";
   print_memory_used();
+  // Iniciamos el conteo del tiempo.
+  start = clock();
 
   // En frontier almacenaremos los nodos que representan los estados a explorar
   // ordenados segun f. Primero agregamos el estado inicial.
@@ -170,6 +195,8 @@ Node *best_first_search_dup_pruning(
     if (frontier.empty()) {
       // Imprimimos la cantidad de nodos expandidos por profundidad y la 
       // memoria virtual usada.
+      print_time();
+      cout << "Final memory: ";
       print_memory_used();
       print_visited();
       cout << "No hay solucion.\n";
@@ -187,6 +214,8 @@ Node *best_first_search_dup_pruning(
     if (is_goal(node->state)) {
       // Imprimimos la cantidad de nodos expandidos por profundidad y la 
       // memoria virtual usada.
+      print_time();
+      cout << "Final memory: ";
       print_memory_used();
       print_visited();
       return node;
@@ -233,7 +262,10 @@ Node *best_first_search_late_dup_pruning(
     unsigned (*f) (Node*)
 ) {
   // Imprimimos la memoria virtual inicial.
+  cout << "Initial memory: ";
   print_memory_used();
+  // Iniciamos el conteo del tiempo.
+  start = clock();
 
   // En q almacenaremos los nodos que representan los estados a explorar
   // ordenados segun f. Primero agregamos el estado inicial.
@@ -266,6 +298,8 @@ Node *best_first_search_late_dup_pruning(
       if (is_goal(node->state)) {
         // Imprimimos la cantidad de nodos expandidos por profundidad y la 
         // memoria virtual usada.
+        print_time();
+        cout << "Final memory: ";
         print_memory_used();
         print_visited();
         return node;
@@ -291,6 +325,8 @@ Node *best_first_search_late_dup_pruning(
   // No hay solucion.
   // Imprimimos la cantidad de nodos expandidos por profundidad y la 
   // memoria virtual usada.
+  print_time();
+  cout << "Final memory: ";
   print_memory_used();
   print_visited();
   cout << "No hay solucion.\n";
@@ -376,7 +412,10 @@ Node *ida_dup_pruning(
     unsigned (*h) (state_t*)
 ) {
   // Imprimimos la memoria virtual inicial.
+  cout << "Initial memory: ";
   print_memory_used();
+  // Iniciamos el conteo del tiempo.
+  start = clock();
 
   Node *root = new Node(s_init);
   unsigned bound = h(root->state);
@@ -402,6 +441,8 @@ Node *ida_dup_pruning(
     if (t.first != NULL) {
       // Imprimimos la cantidad de nodos expandidos por profundidad y la 
       // memoria virtual usada.
+      print_time();
+      cout << "Final memory: ";
       print_memory_used();
       print_visited();
       return t.first;
@@ -412,6 +453,8 @@ Node *ida_dup_pruning(
 
   // Imprimimos la cantidad de nodos expandidos por profundidad y la 
   // memoria virtual usada.
+  print_time();
+  cout << "Final memory: ";
   print_memory_used();
   print_visited();
   cout << "No hay solucion.\n";
@@ -495,7 +538,10 @@ vector<int> ida_part_dup_pruning(
     unsigned (*h) (state_t*)
 ) {
   // Imprimimos la memoria virtual inicial.
+  cout << "Initial memory: ";
   print_memory_used();
+  // Iniciamos el conteo del tiempo.
+  start = clock();
 
   state = s_init;
   unsigned bound = h(state);
@@ -515,6 +561,8 @@ vector<int> ida_part_dup_pruning(
     if (p.first) {
       // Imprimimos la cantidad de nodos expandidos por profundidad y la 
       // memoria virtual usada.
+      print_time();
+      cout << "Final memory: ";
       print_memory_used();
       print_visited();
       return path;
@@ -524,6 +572,8 @@ vector<int> ida_part_dup_pruning(
 
   // Imprimimos la cantidad de nodos expandidos por profundidad y la 
   // memoria virtual usada.
+  print_time();
+  cout << "Final memory: ";
   print_memory_used();
   print_visited();
   cout << "No hay solucion.\n";

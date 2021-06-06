@@ -7,12 +7,13 @@
 #include <set>
 #include <map>
 #include <iostream>
+#include <bits/stdc++.h>
+#include "sys/types.h"
+#include "sys/sysinfo.h"
+
 #include "Node.hpp"
 #include "PriorityQueue.hpp"
 #include "NodesPriorityQueue.hpp"
-
-#include "sys/types.h"
-#include "sys/sysinfo.h"
 
 using namespace std;
 

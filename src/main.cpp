@@ -14,7 +14,7 @@ int main(void) {
   int opt;
 
   // Read a line from stdin
-  printf("Introduzca el estado inicial: ");
+  printf("Introduzca el \e[1;3mestado\e[0m inicial: ");
   if (fgets(str, sizeof(str), stdin) == NULL) {
     printf("Error: estado vacio.\n");
     return 1; 
@@ -29,7 +29,7 @@ int main(void) {
 
   // Select the heuristic.
   printf(
-    "Indique cual heuristica quiere usar:\n"
+    "\nIndique cual \e[1;3mheuristica\e[0m quiere usar:\n"
     "  1: Manhattan (Sliding Tile).\n"
   );
   if (fgets(str, sizeof(str), stdin) == NULL) {
@@ -48,7 +48,7 @@ int main(void) {
 
   // Select the informed search function.
   printf(
-    "Indique cual funcion quiere usar:\n"
+    "\nIndique cual \e[1;3mbusqueda\e[0m quiere usar:\n"
     "  1: A*.\n"
     "  2: A* con eliminacion de duplicados.\n"
     "  3: A* con eliminacion tardia de duplicados.\n"
@@ -60,6 +60,7 @@ int main(void) {
     printf("Error: input invalido.\n");
     exit(1); 
   }
+  cout << "\n\n";
   opt = atoi(str);
   if (opt < 6) {
     
@@ -76,17 +77,21 @@ int main(void) {
     }
 
     if (solution != NULL) {
+      cout << "Solution: [";
       vector<int> rules = solution->extract_path();
       for (vector<int>::reverse_iterator it = rules.rbegin(); it != rules.rend(); it++) {
-        cout << get_fwd_rule_label(*it) << "\n";
+        cout << get_fwd_rule_label(*it) << ", ";
       }
+      cout << "]\n";
     }
 
   } else if (opt == 6) {
+    cout << "Solution: [";
     vector<int> rules = ida_part_dup_pruning(s_init, h);
     for (vector<int>::iterator it = rules.begin(); it != rules.end(); it++) {
       cout << get_fwd_rule_label(*it) << "\n";
     }
+    cout << "]\n";
   } else {
     printf("Error: input invalido.\n");
     exit(1); 
