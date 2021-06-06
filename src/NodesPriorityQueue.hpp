@@ -21,15 +21,15 @@ operaciones:
 class NodesPriorityQueue {
   private:
     // hash mapea los id de los nodos a pares valor, nodo.
-    map<uint64_t, pair<int, Node*>> hash;
+    map<uint64_t, pair<unsigned, Node*>> hash;
     // ordered_nodes contiene los nodos ordenados segun algun valor.
-    set<pair<int, Node*>> ordered_nodes;
+    set<pair<unsigned, Node*>> ordered_nodes;
     // Funcion de evaluacion de nodos.
-    int (*f) (Node*);
+    unsigned (*f) (Node*);
 
   public:
     // Constructor.
-    NodesPriorityQueue(int (*f) (Node*));
+    NodesPriorityQueue(unsigned (*f) (Node*));
 
     // Indica si la estructura esta vacia.
     bool empty(void);

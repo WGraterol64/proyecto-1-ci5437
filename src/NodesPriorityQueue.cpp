@@ -1,7 +1,7 @@
 #include "NodesPriorityQueue.hpp"
 
 /* Constructor. */
-NodesPriorityQueue::NodesPriorityQueue(int (*f) (Node*)) {
+NodesPriorityQueue::NodesPriorityQueue(unsigned (*f) (Node*)) {
   this->f = f;
 }
 
@@ -33,11 +33,11 @@ bool NodesPriorityQueue::find(Node *node) {
 */
 void NodesPriorityQueue::add(Node *node) {
   // value_node contiene el par (f(node), node)
-  pair<int, Node*> value_node = pair<int, Node*>(this->f(node), node);
+  pair<unsigned, Node*> value_node = pair<unsigned, Node*>(this->f(node), node);
   // Agregamos el par (id : (f(node), node)) a la tabla de hash.
-  this->hash.insert(pair<uint64_t, pair<int, Node*>> (hash_state(node->state), value_node));
+  this->hash.insert(pair<uint64_t, pair<unsigned, Node*>> (hash_state(node->state), value_node));
   // Agregamos el par (f(node), node) al conjunto ordenado.
-  this->ordered_nodes.insert(pair<int, Node*> (this->f(node), node));
+  this->ordered_nodes.insert(pair<unsigned, Node*> (this->f(node), node));
 }
 
 /* 
@@ -48,7 +48,7 @@ void NodesPriorityQueue::add(Node *node) {
 */
 Node* NodesPriorityQueue::pop(void) {
   // Obtenemos el menor nodo de la lista de nodos ordenados.
-  set<pair<int, Node*>>::iterator it = this->ordered_nodes.begin();
+  set<pair<unsigned, Node*>>::iterator it = this->ordered_nodes.begin();
   // Eliminamos dicho nodo tanto de la lista ordenada como del hash.
   this->ordered_nodes.erase(it);
   this->hash.erase(hash_state((*it).second->state));
@@ -64,13 +64,13 @@ Node* NodesPriorityQueue::pop(void) {
 */
 void NodesPriorityQueue::replace_if_less(Node *node) {
   // Buscamos el nodo en el hash.
-  map<uint64_t, pair<int, Node*>>::iterator it = this->hash.find(hash_state(node->state));
+  map<uint64_t, pair<unsigned, Node*>>::iterator it = this->hash.find(hash_state(node->state));
   // Si el nodo almacenado tiene un costo menor o igual al del nuevo nodo, no
   // se realiza el reemplazo
   if ((*it).second.second->g <= node->g) return;
   // Si no, realizamos el reemplazo.
   // value_node contiene el par (f(node), node)
-  pair<int, Node*> value_node = pair<int, Node*>(this->f(node), node);
+  pair<unsigned, Node*> value_node = pair<unsigned, Node*> (this->f(node), node);
   this->hash[hash_state(node->state)] = value_node; 
   this->ordered_nodes.erase((*it).second);
   this->ordered_nodes.insert(value_node);
