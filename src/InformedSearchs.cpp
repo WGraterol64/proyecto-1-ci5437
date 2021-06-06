@@ -19,7 +19,7 @@ clock_t start;
 */
 void print_visited(void) {
   // Imprimimos los nodos visitados por profundidad.
-  cout <<"Current number of expanded nodes by depth: [";
+  cout <<"Expanded nodes by depth: [";
   for (vector<unsigned>::iterator it = visited->begin(); it != visited->end(); it++) {
     cout << *it << ", ";
   }
@@ -441,6 +441,7 @@ Node *ida_dup_pruning(
     if (t.first != NULL) {
       // Imprimimos la cantidad de nodos expandidos por profundidad y la 
       // memoria virtual usada.
+      cout << "\n";
       print_time();
       cout << "Final memory: ";
       print_memory_used();
@@ -453,6 +454,7 @@ Node *ida_dup_pruning(
 
   // Imprimimos la cantidad de nodos expandidos por profundidad y la 
   // memoria virtual usada.
+  cout << "\n";
   print_time();
   cout << "Final memory: ";
   print_memory_used();
@@ -561,6 +563,7 @@ vector<int> ida_part_dup_pruning(
     if (p.first) {
       // Imprimimos la cantidad de nodos expandidos por profundidad y la 
       // memoria virtual usada.
+      cout << "\n";
       print_time();
       cout << "Final memory: ";
       print_memory_used();
@@ -572,6 +575,7 @@ vector<int> ida_part_dup_pruning(
 
   // Imprimimos la cantidad de nodos expandidos por profundidad y la 
   // memoria virtual usada.
+  cout << "\n";
   print_time();
   cout << "Final memory: ";
   print_memory_used();
