@@ -1,7 +1,7 @@
 #include "Node.hpp"
 
 /* Constructor. */
-Node::Node(state_t *state, Node *parent, int rule_id, int g, long unsigned int d) {
+Node::Node(state_t *state, Node *parent, int rule_id, unsigned g, long unsigned d) {
   this->state = state;
   this->parent = parent;
   this->rule_id = rule_id;

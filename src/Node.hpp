@@ -8,7 +8,7 @@ using namespace std;
 class Node {
   public:
     // Constructor.
-    Node(state_t *state, Node *parent=NULL, int rule_id=-1, int g=0, long unsigned int d=0);
+    Node(state_t *state, Node *parent=NULL, int rule_id=-1, unsigned g=0, long unsigned d=0);
     // Destructor.
     ~Node(void);
 
@@ -19,9 +19,9 @@ class Node {
     // Accion necesaria para pasar del nodo padre al nodo actual.
     int rule_id;
     // Costo del camino hasta el nodo actual. 
-    int g;
+    unsigned g;
     // Profundidad.
-    long unsigned int d;
+    long unsigned d;
 
     // Retorna la lista de acciones necesarias para pasar desde el nodo raiz
     // hasta el nodo actual, pero invertida
