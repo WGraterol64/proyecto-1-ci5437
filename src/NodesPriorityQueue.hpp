@@ -41,4 +41,4 @@ class NodesPriorityQueue {
     Node* pop(void);
     // Reemplaza un nodo si ya se encuentra en la estructura pero con menor valor.
     void replace_if_less(Node *node);
-};
+}; 

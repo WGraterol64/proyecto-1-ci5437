@@ -22,8 +22,9 @@ int main(void) {
     return 2; 
   }
 
+  vector<int> *visited = new vector<int>;
   //Node* solution = ida_star(s_init, h);
-  Node* solution = best_first_search(s_init, f);
+  Node* solution = best_first_search(s_init, f, visited);
   if (solution == NULL) {
     cout << "Not Solution.\n";
     return 1;

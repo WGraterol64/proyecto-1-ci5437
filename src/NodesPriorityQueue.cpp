@@ -6,33 +6,30 @@ NodesPriorityQueue::NodesPriorityQueue(int (*f) (Node*)) {
 }
 
 /* 
-Verifica si la estructura esta vacia.
-
-OUTPUT:
+  Verifica si la estructura esta vacia.
+  OUTPUT:
   bool  =>  True si la estructura esta vacia.
-O(1)
+  O(1)
 */
 bool NodesPriorityQueue::empty(void) {
   return this->ordered_nodes.size() == 0;
 }
 
 /*
-Verifica si un nodo se encuentra en la estructura.
-
-OUTPUT:
-  bool  =>  True si el nodo esta en la estructura.
-O(1)
+  Verifica si un nodo se encuentra en la estructura.
+  OUTPUT:
+    bool  =>  True si el nodo esta en la estructura.
+  O(1)
 */
 bool NodesPriorityQueue::find(Node *node) {
   return this->hash.count(hash_state(node->state)) != 0;
 }
 
 /*
-Agrega un nodo a la estructura.
-
-INPUT:
-  Node* node  =>  Nodo a agregar
-O(log n)
+  Agrega un nodo a la estructura.
+  INPUT:
+    Node* node  =>  Nodo a agregar
+  O(log n)
 */
 void NodesPriorityQueue::add(Node *node) {
   // value_node contiene el par (f(node), node)
@@ -44,11 +41,10 @@ void NodesPriorityQueue::add(Node *node) {
 }
 
 /* 
-Retorna el nodo de menor valor de la estructura.
-
-OUTPUT:
-  Node* =>  Nodo de menor valor de la estructura.
-O(log n)
+  Retorna el nodo de menor valor de la estructura.
+  OUTPUT:
+    Node* =>  Nodo de menor valor de la estructura.
+  O(log n)
 */
 Node* NodesPriorityQueue::pop(void) {
   // Obtenemos el menor nodo de la lista de nodos ordenados.
@@ -61,11 +57,10 @@ Node* NodesPriorityQueue::pop(void) {
 }
 
 /*
-Reemplaza un nodo si ya se encuentra en la estructura pero con menor valor.
-
-INPUT:
-  Node *node  =>  Node que posiblemente reemplazara a su equivalente.
-O(log n)
+  Reemplaza un nodo si ya se encuentra en la estructura pero con menor valor.
+  INPUT:
+    Node *node  =>  Node que posiblemente reemplazara a su equivalente.
+  O(log n)
 */
 void NodesPriorityQueue::replace_if_less(Node *node) {
   // Buscamos el nodo en el hash.
@@ -79,4 +74,4 @@ void NodesPriorityQueue::replace_if_less(Node *node) {
   this->hash[hash_state(node->state)] = value_node; 
   this->ordered_nodes.erase((*it).second);
   this->ordered_nodes.insert(value_node);
-}
+} 

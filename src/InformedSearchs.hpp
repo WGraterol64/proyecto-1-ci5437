@@ -12,14 +12,16 @@ using namespace std;
 Busqueda de mejor camino con eliminacion tardia de duplicados.
 
 INPUTS:
-  state_t *s_init   =>  Estado inicial de la busqueda.
-  int (*f) (Node*)  =>  Funcion de evaluacion de un nodo. Si f es el costo del camino
+  state_t *s_init       =>  Estado inicial de la busqueda.
+  int (*f) (Node*)      =>  Funcion de evaluacion de un nodo. Si f es el costo del camino
       parcial, entonces el algoritmo es UCS; si f es una heuristica, entonces el 
       algoritmo es de busqueda voraz; y si es el costo + heuristica, entonces es A*
+  vector<int> *visited  =>  Lista que cuenta el numero de estados visitados por nivel de 
+      profundidad.
 OUTPUT:
   Node* =>  Nodo que contiene la solucion. NULL si no hay solucion.
 */
-Node *best_first_search(state_t *s_init, int (*f) (Node*)) {
+Node *best_first_search(state_t *s_init, int (*f) (Node*), vector<int> *visited) {
   // En q almacenaremos los nodos que representan los estados a explorar
   // ordenados segun f. Primero agregamos el estado inicial.
   PriorityQueue<int, Node*> q = PriorityQueue<int, Node*>(f);
@@ -40,6 +42,9 @@ Node *best_first_search(state_t *s_init, int (*f) (Node*)) {
   while (! q.empty()) {
     node = q.pop();
     hash_value = hash_state(node->state);
+    if (visited->size() <= node->d) visited->push_back(node->d);
+    else (*visited)[node->d]++;
+
 
     // Si el estado actual no ha sido visitado o su costo parcial es menor que el 
     // almacenado en explored.
@@ -101,10 +106,9 @@ pair<Node*, int> ida_star_search(
   init_fwd_iter(&iter, node->state);
   while((ruleid = next_ruleid(&iter)) >= 0) {
 
-    // Obtenemos el siguiente sucesor.
+    // Obtenemos el siguiente sucesor y creamos al nodo hijo.
     succ = new state_t;
     apply_fwd_rule(ruleid, node->state, succ);
-    // Creamos el nodo hijo.
     child = node->make_node(succ, ruleid);
 
     // Si el estado no se encuentra en el camino actual.
@@ -118,6 +122,7 @@ pair<Node*, int> ida_star_search(
       if (t.first != NULL) return t;
       if (t.second < min) min = t.second;
       path->erase(child->state);
+      // Liberamos la memoria del nodo hijo
       delete child;
     }
   }
