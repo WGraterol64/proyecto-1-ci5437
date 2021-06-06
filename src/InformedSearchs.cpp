@@ -1,7 +1,16 @@
 #include "InformedSearchs.hpp"
 
+/*  ======================= VARIABLES GLOBALES ======================= */
+// Almacena los nodos visitados por profundidad.
 vector<unsigned> *visited = new vector<unsigned>;
+// Estado global usado en la funcion IDA* con eliminacion parcial de duplicados.
+state_t *state;
+// Camino de acciones necesarios para pasar del estado inicial al estado global.
+vector<int> path;
 
+
+
+/*  ======================= FUNCIONES AUXILIARES ======================= */
 /* 
   Imprime al vector visited siguiendo la sintaxis de Python para luego hacer
   graficas mas facilmente.
@@ -28,8 +37,33 @@ void print_memory_used(void) {
   cout << "Memory used: " << virtualMemUsed / (1024*1024*1024) << "Gb\n";
 }
 
+/*
+  Aplica una regla forward sobre un estado y almacena el resultado en el 
+  mismo estado.
+*/
+void apply_rule(int ruleid, state_t *state) {
+  // Resulta que no podemos ejecutar:   apply_fwd_rule(ruleid, state, state)
+  // porque state se modifica mientras se lee (que implementacion tan chimba)
+  // por lo tanto, debemos usar una copia auxiliar para que no hayan errores.
+  // Este peo me amargo la vida como por 2 horas.
+  state_t state_aux;
+  copy_state(&state_aux, state);
+  apply_fwd_rule(ruleid, &state_aux, state);
+}
+
+/*
+  Aplica una regla backward sobre un estado y almacena el resultado en el 
+  mismo estado.
+*/
+void revert_rule(int ruleid, state_t *state) {
+  state_t state_aux;
+  copy_state(&state_aux, state);
+  apply_bwd_rule(ruleid, &state_aux, state);
+}
 
 
+
+/*  ======================= FUNCIONES PRINCIPALES ======================= */
 /*
   Busqueda de mejor camino.
 
@@ -45,6 +79,9 @@ Node *best_first_search(
     state_t *s_init, 
     unsigned (*f) (Node*)
 ) {
+  // Imprimimos la memoria virtual inicial.
+  print_memory_used();
+
   // En q almacenaremos los nodos que representan los estados a explorar
   // ordenados segun f. Primero agregamos el estado inicial.
   PriorityQueue<unsigned, Node*> q = PriorityQueue<unsigned, Node*>(f);
@@ -58,11 +95,23 @@ Node *best_first_search(
 
   while (1) {
     // Si q se queda vacio, no hay solucion.
-    if (q.empty()) return NULL;
-    // Obtenemos el siguiente nodo y verificamos si es solucion.
+    if (q.empty()) {
+      // Imprimimos la cantidad de nodos expandidos por profundidad y la 
+      // memoria virtual usada.
+      print_memory_used();
+      print_visited();
+      cout << "No hay solucion.\n";
+      return NULL;
+    }
+
+    // Obtenemos el siguiente nodo.
     node = q.pop();
+
+    // Actualizamos el conteo de nodos.
     if (visited->size() <= node->d) visited->push_back(1);
     else (*visited)[node->d]++;
+
+    // Verificamos si es solucion.
     if (is_goal(node->state)) {
       print_visited();
       return node;
@@ -97,6 +146,9 @@ Node *best_first_search_dup_pruning(
     state_t *s_init, 
     unsigned (*f) (Node*)
 ) {
+  // Imprimimos la memoria virtual inicial.
+  print_memory_used();
+
   // En frontier almacenaremos los nodos que representan los estados a explorar
   // ordenados segun f. Primero agregamos el estado inicial.
   NodesPriorityQueue frontier = NodesPriorityQueue(f);
@@ -112,14 +164,30 @@ Node *best_first_search_dup_pruning(
   ruleid_iterator_t iter;
   int ruleid;
 
-  while (1) {
+  while (true) {
+
     // Si frontier se queda vacio, no hay solucion.
-    if (frontier.empty()) return NULL;
-    // Obtenemos el siguiente nodo y verificamos si es solucion.
+    if (frontier.empty()) {
+      // Imprimimos la cantidad de nodos expandidos por profundidad y la 
+      // memoria virtual usada.
+      print_memory_used();
+      print_visited();
+      cout << "No hay solucion.\n";
+      return NULL;
+    }
+
+    // Obtenemos el siguiente nodo.
     node = frontier.pop();
+
+    // Actualizamos el conteo de nodos.
     if (visited->size() <= node->d) visited->push_back(1);
     else (*visited)[node->d]++;
+
+    // Verificamos si es solucion.
     if (is_goal(node->state)) {
+      // Imprimimos la cantidad de nodos expandidos por profundidad y la 
+      // memoria virtual usada.
+      print_memory_used();
       print_visited();
       return node;
     }
@@ -164,6 +232,9 @@ Node *best_first_search_late_dup_pruning(
     state_t *s_init, 
     unsigned (*f) (Node*)
 ) {
+  // Imprimimos la memoria virtual inicial.
+  print_memory_used();
+
   // En q almacenaremos los nodos que representan los estados a explorar
   // ordenados segun f. Primero agregamos el estado inicial.
   PriorityQueue<unsigned, Node*> q = PriorityQueue<unsigned, Node*>(f);
@@ -183,16 +254,23 @@ Node *best_first_search_late_dup_pruning(
   while (! q.empty()) {
     node = q.pop();
     hash_value = hash_state(node->state);
+
+    // Actualizamos el conteo de nodos.
     if (visited->size() <= node->d) visited->push_back(1);
     else (*visited)[node->d]++;
 
     // Si el estado actual no ha sido visitado o su costo parcial es menor que el 
     // almacenado en explored.
     if (explored.count(hash_value) == 0 || node->g < explored[hash_value]) {
+
       if (is_goal(node->state)) {
+        // Imprimimos la cantidad de nodos expandidos por profundidad y la 
+        // memoria virtual usada.
+        print_memory_used();
         print_visited();
         return node;
       }
+
       explored[hash_value] = node->g;
 
       // Inicializamos el iterador de sucesores.
@@ -211,6 +289,11 @@ Node *best_first_search_late_dup_pruning(
     }
   }
   // No hay solucion.
+  // Imprimimos la cantidad de nodos expandidos por profundidad y la 
+  // memoria virtual usada.
+  print_memory_used();
+  print_visited();
+  cout << "No hay solucion.\n";
   return NULL;
 }
 
@@ -235,6 +318,7 @@ pair<Node*, unsigned> ida_search_dup_pruning(
     unsigned bound, 
     unsigned (*h) (state_t*)
 ) {
+  // Actualizamos el conteo de nodos.
   if (visited->size() <= node->d) visited->push_back(1);
   else (*visited)[node->d]++;
 
@@ -270,6 +354,7 @@ pair<Node*, unsigned> ida_search_dup_pruning(
       if (t.first != NULL) return t;
       if (t.second < min) min = t.second;
       path->erase(child->state);
+
       // Liberamos la memoria del nodo hijo
       delete child;
     }
@@ -277,7 +362,6 @@ pair<Node*, unsigned> ida_search_dup_pruning(
   return {NULL, min};
 }
 
-unsigned long long new_nodes = 0, current_nodes = 0;
 /*
   Implementacion del algoritmo IDA* con eliminacion de duplicados.
 
@@ -291,55 +375,50 @@ Node *ida_dup_pruning(
     state_t *s_init, 
     unsigned (*h) (state_t*)
 ) {
+  // Imprimimos la memoria virtual inicial.
+  print_memory_used();
+
   Node *root = new Node(s_init);
   unsigned bound = h(root->state);
+
+  // path es un conjunto que almacena los nodos del camino desde la raiz
+  // hasta el nodo actual. Usamos un conjunto para discriminar facilmente 
+  // si un nodo se encuentra en el camino actual.
   set<state_t*> *path = new set<state_t*>;
   path->insert(root->state);
+
   pair<Node*, unsigned> t;
 
-  while (1) {
-    cout << "Bound: " << bound << "\n";
+  cout << "\nTHRESHOLDS: ";
+  fflush(stdout);
+
+  while (bound != UINT_MAX) {
+    // Imprimimos la cota actual.
+    cout << bound << " ";
+    fflush(stdout);
+
     t = ida_search_dup_pruning(root, path, bound, h);
 
     if (t.first != NULL) {
+      // Imprimimos la cantidad de nodos expandidos por profundidad y la 
+      // memoria virtual usada.
+      print_memory_used();
       print_visited();
       return t.first;
     }
-    if (t.second == UINT_MAX) return NULL;
+    
     bound = t.second;
-    }
+  }
+
+  // Imprimimos la cantidad de nodos expandidos por profundidad y la 
+  // memoria virtual usada.
+  print_memory_used();
+  print_visited();
+  cout << "No hay solucion.\n";
+  return NULL;
 }
 
 
-
-/*
-  Aplica una regla forward sobre un estado y almacena el resultado en el 
-  mismo estado.
-*/
-void apply_rule(int ruleid, state_t *state) {
-  // Resulta que no podemos ejecutar:   apply_fwd_rule(ruleid, state, state)
-  // porque state se modifica mientras se lee (que implementacion tan chimba)
-  // por lo tanto, debemos usar una copia auxiliar para que no hayan errores.
-  // Este peo me amargo la vida como por 2 horas.
-  state_t state_aux;
-  copy_state(&state_aux, state);
-  apply_fwd_rule(ruleid, &state_aux, state);
-}
-
-/*
-  Aplica una regla backward sobre un estado y almacena el resultado en el 
-  mismo estado.
-*/
-void revert_rule(int ruleid, state_t *state) {
-  state_t state_aux;
-  copy_state(&state_aux, state);
-  apply_bwd_rule(ruleid, &state_aux, state);
-}
-
-// Estado global usado en la funcion IDA* con eliminacion parcial de duplicados.
-state_t *state;
-// Camino de acciones necesarios para pasar del estado inicial al estado global.
-vector<int> path;
 
 /*
   Implementacion de la busqueda en profundida de IDA* con eliminacion parcial de duplicados.
@@ -415,25 +494,39 @@ vector<int> ida_part_dup_pruning(
     state_t *s_init, 
     unsigned (*h) (state_t*)
 ) {
+  // Imprimimos la memoria virtual inicial.
+  print_memory_used();
+
   state = s_init;
   unsigned bound = h(state);
   pair<bool, unsigned> p;
 
-  print_memory_used();
-  cout << "\n";
+  cout << "\nTHRESHOLDS: ";
+  fflush(stdout);
 
   // Mientras nuestra cota no sea "infinita"/
-  while (true) {
-    cout << "THRESHOLD: " << bound << "\n";
+  while (bound != UINT_MAX) {
+    // Imprimimos la cota actual.
+    cout << bound << " ";
+    fflush(stdout);
+
     p = ida_search_part_dup_pruning(bound, 0, 0, h);
-    print_visited();
-    print_memory_used();
-    cout << "\n";
 
     if (p.first) {
+      // Imprimimos la cantidad de nodos expandidos por profundidad y la 
+      // memoria virtual usada.
+      print_memory_used();
       print_visited();
       return path;
     }
     bound = p.second;
   }
+
+  // Imprimimos la cantidad de nodos expandidos por profundidad y la 
+  // memoria virtual usada.
+  print_memory_used();
+  print_visited();
+  cout << "No hay solucion.\n";
+  path.clear();
+  return path;
 }

@@ -1,10 +1,9 @@
 #include "head.hpp"
 
-using namespace std;
-
+// Variable global que almacenara una heuristica.
 unsigned (*h) (state_t*);
 
-// Funcion de evaluacion.
+// Funcion de evaluacion de nodos.
 unsigned f(Node *node) { return node->g + h(node->state); }
 
 int main(void) {
@@ -76,9 +75,7 @@ int main(void) {
         exit(1); 
     }
 
-    if (solution == NULL) {
-      printf("No hay solucion.\n");
-    } else {
+    if (solution != NULL) {
       vector<int> rules = solution->extract_path();
       for (vector<int>::reverse_iterator it = rules.rbegin(); it != rules.rend(); it++) {
         cout << get_fwd_rule_label(*it) << "\n";
@@ -90,6 +87,9 @@ int main(void) {
     for (vector<int>::iterator it = rules.begin(); it != rules.end(); it++) {
       cout << get_fwd_rule_label(*it) << "\n";
     }
+  } else {
+    printf("Error: input invalido.\n");
+    exit(1); 
   }
 
   return 0;
