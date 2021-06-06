@@ -5,6 +5,6 @@
 
 using namespace std;
 
-#define DIM 3
+#define DIM 4
 // Distancia manhattan.
 unsigned manhattan(state_t *state);

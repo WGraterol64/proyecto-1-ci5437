@@ -62,16 +62,15 @@ int main(void) {
     exit(1); 
   }
   opt = atoi(str);
-  vector<unsigned> *visited = new vector<unsigned>;
   if (opt < 6) {
     
     Node* solution;
     switch(opt) {
-      case 1: solution = best_first_search(s_init, f, visited); break;
-      case 2: solution = best_first_search_dup_pruning(s_init, f, visited); break;
-      case 3: solution = best_first_search_late_dup_pruning(s_init, f, visited); break;
+      case 1: solution = best_first_search(s_init, f); break;
+      case 2: solution = best_first_search_dup_pruning(s_init, f); break;
+      case 3: solution = best_first_search_late_dup_pruning(s_init, f); break;
       case 4:
-      case 5: solution = ida_dup_pruning(s_init, h, visited); break;
+      case 5: solution = ida_dup_pruning(s_init, h); break;
       default:
         printf("Error: input invalido.\n");
         exit(1); 
@@ -87,18 +86,11 @@ int main(void) {
     }
 
   } else if (opt == 6) {
-    vector<int> rules = ida_part_dup_pruning(s_init, h, visited);
+    vector<int> rules = ida_part_dup_pruning(s_init, h);
     for (vector<int>::iterator it = rules.begin(); it != rules.end(); it++) {
       cout << get_fwd_rule_label(*it) << "\n";
     }
   }
-
-  // Imprimimos los nodos visitados por profundidad.
-  cout <<"[";
-  for (vector<unsigned>::iterator it = visited->begin(); it != visited->end(); it++) {
-    cout << *it << ", ";
-  }
-  cout <<"]\n";
 
   return 0;
 }

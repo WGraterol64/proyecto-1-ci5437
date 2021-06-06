@@ -1,5 +1,35 @@
 #include "InformedSearchs.hpp"
 
+vector<unsigned> *visited = new vector<unsigned>;
+
+/* 
+  Imprime al vector visited siguiendo la sintaxis de Python para luego hacer
+  graficas mas facilmente.
+*/
+void print_visited(void) {
+  // Imprimimos los nodos visitados por profundidad.
+  cout <<"Current number of expanded nodes by depth: [";
+  for (vector<unsigned>::iterator it = visited->begin(); it != visited->end(); it++) {
+    cout << *it << ", ";
+  }
+  cout <<"]\n";
+}
+
+/*
+  Imprime la memoria virtual (ram y swap) usada actualmente.
+*/
+void print_memory_used(void) {
+  struct sysinfo memInfo;
+  sysinfo (&memInfo);
+  double virtualMemUsed = memInfo.totalram - memInfo.freeram;
+  //Add other values in next statement to avoid int overflow on right hand side...
+  virtualMemUsed += memInfo.totalswap - memInfo.freeswap;
+  virtualMemUsed *= memInfo.mem_unit;
+  cout << "Memory used: " << virtualMemUsed / (1024*1024*1024) << "Gb\n";
+}
+
+
+
 /*
   Busqueda de mejor camino.
 
@@ -8,15 +38,12 @@
     unsigned (*f) (Node*)       =>  Funcion de evaluacion de un nodo. Si f es el costo del 
         camino parcial, entonces el algoritmo es UCS; si f es una heuristica, entonces 
         el algoritmo es de busqueda voraz; y si es el costo + heuristica, entonces es A*
-    vector<unsigned> *visited   =>  Lista que cuenta el numero de estados visitados 
-        por nivel de profundidad.
   OUTPUT:
     Node* =>  Nodo que contiene la solucion. NULL si no hay solucion.
 */
 Node *best_first_search(
     state_t *s_init, 
-    unsigned (*f) (Node*),
-    vector<unsigned> *visited
+    unsigned (*f) (Node*)
 ) {
   // En q almacenaremos los nodos que representan los estados a explorar
   // ordenados segun f. Primero agregamos el estado inicial.
@@ -36,7 +63,10 @@ Node *best_first_search(
     node = q.pop();
     if (visited->size() <= node->d) visited->push_back(1);
     else (*visited)[node->d]++;
-    if (is_goal(node->state)) return node;
+    if (is_goal(node->state)) {
+      print_visited();
+      return node;
+    }
 
     // Inicializamos el iterador de sucesores.
     init_fwd_iter(&iter, node->state);
@@ -50,6 +80,8 @@ Node *best_first_search(
   }
 }
 
+
+
 /*
   Busqueda de mejor camino con eliminacion de duplicados.
 
@@ -58,15 +90,12 @@ Node *best_first_search(
     unsigned (*f) (Node*)       =>  Funcion de evaluacion de un nodo. Si f es el costo del 
         camino parcial, entonces el algoritmo es UCS; si f es una heuristica, entonces 
         el algoritmo es de busqueda voraz; y si es el costo + heuristica, entonces es A*
-    vector<unsigned> *visited   =>  Lista que cuenta el numero de estados visitados 
-        por nivel de profundidad.
   OUTPUT:
     Node* =>  Nodo que contiene la solucion. NULL si no hay solucion.
 */
 Node *best_first_search_dup_pruning(
     state_t *s_init, 
-    unsigned (*f) (Node*),
-    vector<unsigned> *visited
+    unsigned (*f) (Node*)
 ) {
   // En frontier almacenaremos los nodos que representan los estados a explorar
   // ordenados segun f. Primero agregamos el estado inicial.
@@ -90,7 +119,10 @@ Node *best_first_search_dup_pruning(
     node = frontier.pop();
     if (visited->size() <= node->d) visited->push_back(1);
     else (*visited)[node->d]++;
-    if (is_goal(node->state)) return node;
+    if (is_goal(node->state)) {
+      print_visited();
+      return node;
+    }
     explored.insert(hash_state(node->state));
 
     // Inicializamos el iterador de sucesores.
@@ -114,6 +146,8 @@ Node *best_first_search_dup_pruning(
   }
 }
 
+
+
 /*
   Busqueda de mejor camino con eliminacion tardia de duplicados.
 
@@ -123,15 +157,12 @@ Node *best_first_search_dup_pruning(
         del camino parcial, entonces el algoritmo es UCS; si f es una heuristica, 
         entonces el algoritmo es de busqueda voraz; y si es el costo + heuristica, 
         entonces es A*
-    vector<unsigned> *visited   =>  Lista que cuenta el numero de estados visitados 
-        por nivel de profundidad.
   OUTPUT:
     Node* =>  Nodo que contiene la solucion. NULL si no hay solucion.
 */
 Node *best_first_search_late_dup_pruning(
     state_t *s_init, 
-    unsigned (*f) (Node*), 
-    vector<unsigned> *visited
+    unsigned (*f) (Node*)
 ) {
   // En q almacenaremos los nodos que representan los estados a explorar
   // ordenados segun f. Primero agregamos el estado inicial.
@@ -158,7 +189,10 @@ Node *best_first_search_late_dup_pruning(
     // Si el estado actual no ha sido visitado o su costo parcial es menor que el 
     // almacenado en explored.
     if (explored.count(hash_value) == 0 || node->g < explored[hash_value]) {
-      if (is_goal(node->state)) return node;
+      if (is_goal(node->state)) {
+        print_visited();
+        return node;
+      }
       explored[hash_value] = node->g;
 
       // Inicializamos el iterador de sucesores.
@@ -180,6 +214,8 @@ Node *best_first_search_late_dup_pruning(
   return NULL;
 }
 
+
+
 /*
   Implementacion de la busqueda en profundida de IDA* con eliminacion de duplicados.
 
@@ -189,8 +225,6 @@ Node *best_first_search_late_dup_pruning(
         estado actual.
     int bound                 =>  Limite en el valor de un nodo (costo + heuristica).
     unsigned (*h) (state_t*)  =>  Heuristica.
-    vector<unsigned> *visited =>  Lista que cuenta el numero de estados visitados 
-        por nivel de profundidad.
   OUTPUT:
     pair<Node*, int>  =>  Contiene una referencia al nodo objetivo en caso de ser encontrado
         o el menor valor encontrado que supera el limite actual.
@@ -199,11 +233,11 @@ pair<Node*, unsigned> ida_search_dup_pruning(
     Node *node, 
     set<state_t*> *path, 
     unsigned bound, 
-    unsigned (*h) (state_t*),
-    vector<unsigned> *visited
+    unsigned (*h) (state_t*)
 ) {
   if (visited->size() <= node->d) visited->push_back(1);
   else (*visited)[node->d]++;
+
   unsigned f = node->g + h(node->state);
   if (f > bound) return {NULL, f};
   if (is_goal(node->state)) return {node, f};
@@ -229,7 +263,7 @@ pair<Node*, unsigned> ida_search_dup_pruning(
     if (path->count(child->state) == 0) {
       // Lo agregamos y llamamos recursivamente a la funcion.
       path->insert(child->state);
-      t = ida_search_dup_pruning(child, path, bound, h, visited);
+      t = ida_search_dup_pruning(child, path, bound, h);
 
       // Si encontramos una solucion la retornamos, si no sacamos al estado del
       // camino y probamos con otro sucesor.
@@ -243,21 +277,19 @@ pair<Node*, unsigned> ida_search_dup_pruning(
   return {NULL, min};
 }
 
+unsigned long long new_nodes = 0, current_nodes = 0;
 /*
   Implementacion del algoritmo IDA* con eliminacion de duplicados.
 
   INPUTS:
     state_t *s_init           =>  Estado inicial del problema.
     unsigned (*h) (state_t*)  =>  Heuristica.
-    vector<unsigned> *visited =>  Lista que cuenta el numero de estados visitados 
-        por nivel de profundidad.
   OUTPUT:
     Node* => Direccion del nodo solucion. NULL si no se consiguio ninguna.
 */
 Node *ida_dup_pruning(
     state_t *s_init, 
-    unsigned (*h) (state_t*),
-    vector<unsigned> *visited
+    unsigned (*h) (state_t*)
 ) {
   Node *root = new Node(s_init);
   unsigned bound = h(root->state);
@@ -266,16 +298,49 @@ Node *ida_dup_pruning(
   pair<Node*, unsigned> t;
 
   while (1) {
-    t = ida_search_dup_pruning(root, path, bound, h, visited);
-    if (t.first != NULL) return t.first;
-    if (t.second == INT_MAX) return NULL;
-    bound = t.second;
     cout << "Bound: " << bound << "\n";
-  }
+    t = ida_search_dup_pruning(root, path, bound, h);
+
+    if (t.first != NULL) {
+      print_visited();
+      return t.first;
+    }
+    if (t.second == UINT_MAX) return NULL;
+    bound = t.second;
+    }
 }
 
+
+
+/*
+  Aplica una regla forward sobre un estado y almacena el resultado en el 
+  mismo estado.
+*/
+void apply_rule(int ruleid, state_t *state) {
+  // Resulta que no podemos ejecutar:   apply_fwd_rule(ruleid, state, state)
+  // porque state se modifica mientras se lee (que implementacion tan chimba)
+  // por lo tanto, debemos usar una copia auxiliar para que no hayan errores.
+  // Este peo me amargo la vida como por 2 horas.
+  state_t state_aux;
+  copy_state(&state_aux, state);
+  apply_fwd_rule(ruleid, &state_aux, state);
+}
+
+/*
+  Aplica una regla backward sobre un estado y almacena el resultado en el 
+  mismo estado.
+*/
+void revert_rule(int ruleid, state_t *state) {
+  state_t state_aux;
+  copy_state(&state_aux, state);
+  apply_bwd_rule(ruleid, &state_aux, state);
+}
+
+// Estado global usado en la funcion IDA* con eliminacion parcial de duplicados.
 state_t *state;
+// Camino de acciones necesarios para pasar del estado inicial al estado global.
 vector<int> path;
+
 /*
   Implementacion de la busqueda en profundida de IDA* con eliminacion parcial de duplicados.
 
@@ -284,8 +349,6 @@ vector<int> path;
     unsigned g                =>  Costo del camino hasta el estado actual.
     unsigned d                =>  Profundidad.
     unsigned (*h) (state_t*)  =>  Heuristica.
-    vector<unsigned> *visited =>  Lista que cuenta el numero de estados visitados 
-        por nivel de profundidad.
   OUTPUT:
     pair<bool, int>  =>  El booleano indica si se encontro la solucion e int indica la cota
           obtenida en esta iteracion.
@@ -294,11 +357,12 @@ pair<bool, unsigned> ida_search_part_dup_pruning(
     unsigned bound, 
     unsigned g,
     unsigned d,
-    unsigned (*h) (state_t*),
-    vector<unsigned> *visited
+    unsigned (*h) (state_t*)
 ) {
+  // Actualizamos el conteo de nodos.
   if (visited->size() <= d) visited->push_back(1);
   else (*visited)[d]++;
+
   unsigned h_value = h(state);
   unsigned f_value = g + h_value;
   if (f_value > bound) return {false, f_value};
@@ -308,31 +372,21 @@ pair<bool, unsigned> ida_search_part_dup_pruning(
 
   // Variables para iterar a traves de los sucesores de un determinado estado.
   ruleid_iterator_t iter;
-  state_t *state_aux;
   int ruleid;
   pair<bool, unsigned> p;
-  unsigned cost;
 
   init_fwd_iter(&iter, state);
   while((ruleid = next_ruleid(&iter)) >= 0) {
     // Eliminacion parcial de duplicados.
     //if( fwd_rule_valid_for_history(history, ruleid) == 0 ) continue;
-    cost = g + get_fwd_rule_cost(ruleid);
 
     // Aplicamos la regla.
-    // Resulta que no podemos ejecutar:   apply_fwd_rule(ruleid, state, state)
-    // porque state se modifica mientras se lee (que implementacion tan chimba)
-    // por lo tanto, debemos usar una copia auxiliar para que no hayan errores.
-    // Este peo me amargo la vida como por 2 horas.
-    state_aux = new state_t;
-    copy_state(state_aux, state);
-    apply_fwd_rule(ruleid, state_aux, state);
-    delete state_aux;
+    apply_rule(ruleid, state);
 
     if (h(state) < UINT_MAX) {
       // Agregamos la regla al path.
       path.push_back(ruleid);
-      p = ida_search_part_dup_pruning(bound, cost, d+1, h, visited);
+      p = ida_search_part_dup_pruning(bound, g + get_fwd_rule_cost(ruleid), d+1, h);
       if (p.first) return p;
 
       if (p.second < t) t = p.second;
@@ -341,14 +395,10 @@ pair<bool, unsigned> ida_search_part_dup_pruning(
     }
 
     // Si no conseguimos una solucion, regresamos al estado anterior.
-    state_aux = new state_t;
-    copy_state(state_aux, state);
-    apply_bwd_rule(ruleid, state_aux, state);
-    delete state_aux;
+    revert_rule(ruleid, state);
   }
   return {false, t};
 }
-
 
 /* 
   Implementacion del algoritmo IDA* con eliminacion parcial de duplicados.
@@ -363,17 +413,27 @@ pair<bool, unsigned> ida_search_part_dup_pruning(
 */
 vector<int> ida_part_dup_pruning(
     state_t *s_init, 
-    unsigned (*h) (state_t*),
-    vector<unsigned> *visited
+    unsigned (*h) (state_t*)
 ) {
   state = s_init;
   unsigned bound = h(state);
   pair<bool, unsigned> p;
 
+  print_memory_used();
+  cout << "\n";
+
   // Mientras nuestra cota no sea "infinita"/
   while (true) {
-    p = ida_search_part_dup_pruning(bound, 0, 0, h, visited);
-    if (p.first) return path;
+    cout << "THRESHOLD: " << bound << "\n";
+    p = ida_search_part_dup_pruning(bound, 0, 0, h);
+    print_visited();
+    print_memory_used();
+    cout << "\n";
+
+    if (p.first) {
+      print_visited();
+      return path;
+    }
     bound = p.second;
   }
 }
