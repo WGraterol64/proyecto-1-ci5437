@@ -1,0 +1,57 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage[activeacute]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{bookman}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{anysize}
+\usepackage{multicol}
+\usepackage[pdftex=true,colorlinks=true,linkcolor=black,urlcolor=blue]{hyperref}
+
+\marginsize{1.5cm}{1.5cm}{1.5cm}{1.5cm}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\date{}
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\begin{document}
+
+% ===================================== MEMBRETE ===================================== %
+\begin{center}
+  \textsc {
+    Universidad Simón Bolívar \\[0cm]
+    Departamento de Computaci\'on y Tecnolog\'ia de la Informaci\'on \\[0cm]
+    CI5438 - Inteligencia Artificial I \\[0cm]
+    Trimestre Abril - Julio 2021 \\[0cm]
+    Prof. Carlos Infante \\[0cm]
+    Amin Arriaga 16-10072, David Segura XX-XXXXX, Wilfredo Graterol XX-XXXXX
+  }
+  \HRule \\[0.4cm]
+  {\Large \textbf{B\'usqueda Informada: A* e IDA*}} \\[0.4cm]
+  \textsc{
+    \today
+  }
+  \HRule
+\end{center}
+
+\section{15Puzzle}
+  Para el \textit{15Puzzle} usamos como heur\'istica la distancia Manhattan.
+
+\begin{verbatim}
+  |           FUNCTION|   TIME (SEC)|  MEMORY (GB)|       NODES/SEC|    SOL-LEN|
+  |                 A*|   172.613782|      5.39361|    138210.58622|         45|
+  |         A* pruning|     2.627228|      0.04398|     62283.51708|         45|
+  |    A* late pruning|     2.593914|      0.04016|     90053.48674|         45|
+  |               IDA*|   294.174137|      0.00055|    243362.32182|         45|
+  |       IDA* pruning|     1.537629|       0.0129|    410535.96154|         45|
+  |  IDA* part pruning|     2.629333|      0.00024|    240086.36411|         45|
+\end{verbatim}     
+\begin{figure*}[h!]
+  \centering
+  \includegraphics[scale=0.7]{15puzzle.png}
+\end{figure*}                                                                                
+
+\end{document}
