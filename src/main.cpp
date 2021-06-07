@@ -77,12 +77,8 @@ int main(void) {
 
     // Imprimimos la solucion.
     if (solution != NULL) {
-      cout << "Solution: [";
       vector<int> rules = solution->extract_path();
-      for (vector<int>::reverse_iterator it = rules.rbegin(); it != rules.rend(); it++) {
-        cout << get_fwd_rule_label(*it) << ", ";
-      }
-      cout << "]\n";
+      cout << "Solution size: " << rules.size() << "\n";
     }
 
   } else {
