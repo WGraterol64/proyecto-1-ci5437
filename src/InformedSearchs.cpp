@@ -476,7 +476,7 @@ vector<int> ida(
 
   INPUTS:
     Node *node                =>  Nodo desde donde se realizara la busqueda.
-    set<state_t*> *path       =>  Conjunto que contiene los estados desde la raiz hasta el 
+    set<uint64_t> *path       =>  Conjunto que contiene los estados desde la raiz hasta el 
         estado actual.
     int bound                 =>  Limite en el valor de un nodo (costo + heuristica).
     unsigned (*h) (state_t*)  =>  Heuristica.
@@ -486,7 +486,7 @@ vector<int> ida(
 */
 pair<Node*, unsigned> ida_search_dup_pruning(
     Node *node, 
-    set<state_t*> *path, 
+    set<uint64_t> *path, 
     unsigned bound, 
     unsigned (*h) (state_t*)
 ) {
@@ -516,20 +516,21 @@ pair<Node*, unsigned> ida_search_dup_pruning(
     child = node->make_node(succ, ruleid);
 
     // Si el estado no se encuentra en el camino actual.
-    if (path->count(child->state) == 0) {
+    if (path->count(hash_state(child->state)) == 0) {
       // Lo agregamos y llamamos recursivamente a la funcion.
-      path->insert(child->state);
+      path->insert(hash_state(child->state));
       t = ida_search_dup_pruning(child, path, bound, h);
 
       // Si encontramos una solucion la retornamos, si no sacamos al estado del
       // camino y probamos con otro sucesor.
       if (t.first != NULL) return t;
       if (t.second < min) min = t.second;
-      path->erase(child->state);
+      path->erase(hash_state(child->state));
 
-      // Liberamos la memoria del nodo hijo
-      delete child;
     }
+
+    // Liberamos la memoria del nodo hijo
+    delete child;
   }
   return {NULL, min};
 }
@@ -559,8 +560,8 @@ Node *ida_dup_pruning(
   // path es un conjunto que almacena los nodos del camino desde la raiz
   // hasta el nodo actual. Usamos un conjunto para discriminar facilmente 
   // si un nodo se encuentra en el camino actual.
-  set<state_t*> *path = new set<state_t*>;
-  path->insert(root->state);
+  set<uint64_t> *path = new set<uint64_t>;
+  path->insert(hash_state(root->state));
 
   pair<Node*, unsigned> t;
 
