@@ -5,12 +5,12 @@
 using namespace std;
 
 /* 
-Implementacion de una estructura que almacena elementos ordenados segun una
-funcion y permite las siguientes
-operaciones:
-  * Verificar si esta vacia en O(1).
-  * Agregar un elemento en O(log n).
-  * Obtener el elemento de menor valor en O(log n).
+  Implementacion de una estructura que almacena elementos ordenados segun una
+  funcion y permite las siguientes
+  operaciones:
+    * Verificar si esta vacia en O(1).
+    * Agregar un elemento en O(log n).
+    * Obtener el elemento de menor valor en O(log n).
 */
 template <typename C, typename E>
 class PriorityQueue {
@@ -33,8 +33,8 @@ class PriorityQueue {
 };
 
 /* 
-Agregamos las implementaciones en este archivo y no en un .cpp debido a los 
-problemas de compilacion usando templates.
+  Agregamos las implementaciones en este archivo y no en un .cpp debido a los 
+  problemas de compilacion usando templates.
 */
 
 /* Constructor. */
@@ -44,11 +44,11 @@ PriorityQueue<C, E>::PriorityQueue(C (*f) (E)) {
 }
 
 /* 
-Verifica si la estructura esta vacia.
+  Verifica si la estructura esta vacia.
 
-OUTPUT:
-  bool  =>  True si la estructura esta vacia.
-O(1)
+  OUTPUT:
+    bool  =>  True si la estructura esta vacia.
+  O(1)
 */
 template <typename C, typename E>
 bool PriorityQueue<C, E>::empty(void) {
@@ -56,11 +56,11 @@ bool PriorityQueue<C, E>::empty(void) {
 }
 
 /*
-Agrega un elemento a la estructura.
+  Agrega un elemento a la estructura.
 
-INPUT:
-  E elem  =>  Elemento a agregar
-O(log n)
+  INPUT:
+    E elem  =>  Elemento a agregar
+  O(log n)
 */
 template <typename C, typename E>
 void PriorityQueue<C, E>::add(E elem) {
@@ -69,11 +69,11 @@ void PriorityQueue<C, E>::add(E elem) {
 }
 
 /* 
-Retorna el elemento de menor valor de la estructura.
+  Retorna el elemento de menor valor de la estructura.
 
-OUTPUT:
-  E =>  Elemento de menor valor de la estructura.
-O(log n)
+  OUTPUT:
+    E =>  Elemento de menor valor de la estructura.
+  O(log n)
 */
 template <typename C, typename E>
 E PriorityQueue<C, E>::pop(void) {

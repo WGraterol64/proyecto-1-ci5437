@@ -1,0 +1,35 @@
+# 3x3 sliding tile puzzle, standard representation.
+
+# Domain called "tile" consisting of 9 constants where 'b' is for the blank 
+DOMAIN tile 9 
+b 1 2 3 4 5 6 7 8 
+
+# A state is a vector of length 9 
+9 tile tile tile tile tile tile tile tile tile 
+
+b X - - - - - - -  =>  X b - - - - - - -   LABEL RIGHT
+b - - X - - - - -  =>  X - - b - - - - -   LABEL BOT
+- b X - - - - - -  =>  - X b - - - - - -   LABEL RIGHT
+- b - - X - - - -  =>  - X - - b - - - -   LABEL BOT
+X b - - - - - - -  =>  b X - - - - - - -   LABEL LEFT
+- - b - - X - - -  =>  - - X - - b - - -   LABEL BOT
+- X b - - - - - -  =>  - b X - - - - - -   LABEL LEFT
+X - - b - - - - -  =>  b - - X - - - - -   LABEL TOP
+- - - b X - - - -  =>  - - - X b - - - -   LABEL RIGHT
+- - - b - - X - -  =>  - - - X - - b - -   LABEL BOT
+- X - - b - - - -  =>  - b - - X - - - -   LABEL TOP
+- - - - b X - - -  =>  - - - - X b - - -   LABEL RIGHT
+- - - - b - - X -  =>  - - - - X - - b -   LABEL BOT
+- - - X b - - - -  =>  - - - b X - - - -   LABEL LEFT
+- - X - - b - - -  =>  - - b - - X - - -   LABEL TOP
+- - - - - b - - X  =>  - - - - - X - - b   LABEL BOT
+- - - - X b - - -  =>  - - - - b X - - -   LABEL LEFT
+- - - X - - b - -  =>  - - - b - - X - -   LABEL TOP
+- - - - - - b X -  =>  - - - - - - X b -   LABEL RIGHT
+- - - - X - - b -  =>  - - - - b - - X -   LABEL TOP
+- - - - - - - b X  =>  - - - - - - - X b   LABEL RIGHT
+- - - - - - X b -  =>  - - - - - - b X -   LABEL LEFT
+- - - - - X - - b  =>  - - - - - b - - X   LABEL TOP
+- - - - - - - X b  =>  - - - - - - - b X   LABEL LEFT
+
+GOAL b 1 2 3 4 5 6 7 8 
