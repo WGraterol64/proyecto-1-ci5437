@@ -11,8 +11,8 @@
 # 17 goal states which differ only in their cyclic rotation.
 
 # Domain called "token" consisting of 17 constants. 
-DOMAIN token 17 
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 
+DOMAIN token 18 
+0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 
 
 # A state is a vector of length 17 
 17 token token token token token token token token token token token token token token token token token 

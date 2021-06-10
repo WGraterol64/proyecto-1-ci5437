@@ -23,8 +23,8 @@ f'# TopSpin is a commercial puzzle made by Binary Arts. There is a circular ring
 # Domain.
 psvn += \
 f'# Domain called "token" consisting of {N} constants. \n\
-DOMAIN token {N} \n'
-for i in range(1, N+1): psvn += f'{i} '
+DOMAIN token {N+1} \n'
+for i in range(N+1): psvn += f'{i} '
 
 # States.
 psvn += \
