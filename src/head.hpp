@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 #include "Node.hpp"
 #include "heuristics.hpp"
 #include "InformedSearchs.hpp"

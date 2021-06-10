@@ -14,26 +14,27 @@ int main(void) {
   int opt;
 
   // Read a line from stdin
-  printf("Introduzca el \e[1;3mestado\e[0m inicial: ");
+  cout << "Introduzca el \e[1;3mestado\e[0m inicial: ";
   if (fgets(str, sizeof(str), stdin) == NULL) {
-    printf("Error: estado vacio.\n");
+    cout << "Error: estado vacio.\n";
     return 1; 
   }
 
   // Convert the string to a state
   nchars = read_state(str, s_init);
   if (nchars <= 0) {
-    printf("Error: estado invalido.\n");
+    cout << "Error: estado invalido.\n";
     return 2; 
   }
 
   // Select the heuristic.
-  printf(
+  cout <<
     "\nIndique cual \e[1;3mheuristica\e[0m quiere usar:\n"
-    "  1: Manhattan (Sliding Tile).\n"
-  );
+    "  1: Manhattan (15Puzzle).\n"
+    "  2: Additive PDB (15Puzzle).\n"
+  ;
   if (fgets(str, sizeof(str), stdin) == NULL) {
-    printf("Error: input invalido.\n");
+    cout << "Error: input invalido.\n";
     return 1; 
   }
   opt = atoi(str);
@@ -41,13 +42,25 @@ int main(void) {
     case 1: 
       h = manhattan;
       break;
+    case 2:
+      cout << "Indique la direccion del directorio donde se encuentran los PDB: ";
+      fflush(stdout);
+      if (fgets(str, sizeof(str), stdin) == NULL) {
+        cout << "Error: input invalido.\n";
+        return 1; 
+      }
+      // Eliminamos el salto de linea.
+      str[strlen(str)-1] = '\0';
+      init_pdbs(str);
+      h = additive_pdb_15puzzle;
+      break;
     default:
-      printf("Opcion invalida.\n");
+      cout << "Opcion invalida.\n";
       exit(1);
   }
 
   // Select the informed search function.
-  printf(
+  cout << 
     "\nIndique cual \e[1;3mbusqueda\e[0m quiere usar:\n"
     "  1: A*.\n"
     "  2: A* con eliminacion de duplicados.\n"
@@ -55,9 +68,9 @@ int main(void) {
     "  4: IDA*.\n"
     "  5: IDA* con eliminacion de duplicados.\n"
     "  6: IDA* con eliminacion parcial de duplicados.\n"
-  );
+  ;
   if (fgets(str, sizeof(str), stdin) == NULL) {
-    printf("Error: input invalido.\n");
+    cout << "Error: input invalido.\n";
     exit(1); 
   }
   cout << "\n\n";
@@ -71,7 +84,7 @@ int main(void) {
       case 3: solution = best_first_search_late_dup_pruning(s_init, f); break;
       case 5: solution = ida_dup_pruning(s_init, h); break;
       default:
-        printf("Error: input invalido.\n");
+        cout << "Error: input invalido.\n";
         exit(1); 
     }
 
@@ -88,7 +101,7 @@ int main(void) {
       case 4: rules = ida(s_init, h, false); break;
       case 6: rules = ida(s_init, h, true); break;
       default:
-        printf("Error: input invalido.\n");
+        cout << "Error: input invalido.\n";
         exit(1); 
     }
 
