@@ -35,7 +35,7 @@ pair<int,int> partition_hanois14D[2] = {
   {28, 55},
   {0, 27}
 };
-pair<int,int> partition_hanois18D[2] = {
+pair<int,int> partition_hanois18D[3] = {
   {48, 71},
   {24, 47},
   {0, 23}
@@ -49,7 +49,7 @@ unsigned abs(unsigned x) {
 
 unsigned max_h(unsigned h, unsigned h_i) {
   if (h > h_i) return h;
-  return h_i
+  return h_i;
 }
 
 unsigned sum_h(unsigned h, unsigned h_i) {
@@ -141,9 +141,9 @@ char *make_state_abs_NPuzzle(char *state, string *block, int block_len, string d
   return state_copy;
 }
 
-void set_15puzzle(void) { partition_Npuzzle = partition_15puzzle; dim = 4; }
+void set_15puzzle(void) { partition_Npuzzle = (string**) partition_15puzzle; dim = 4; }
 
-void set_24puzzle(void) { partition_Npuzzle = partition_24puzzle; dim = 5; }
+void set_24puzzle(void) { partition_Npuzzle = (string**) partition_24puzzle; dim = 5; }
 
 /*
   Crea un estado abstracto para las torres de hanois indicandole el bloque de tokens que 
@@ -238,7 +238,7 @@ unsigned pdb_Npuzzle(state_t *state) {
     free(state_abs_str);
 
     // Agregamos el valor del estado abstraido.
-    h_value = f(h_value, (unsigned) *state_map_get(*it, state_abs);
+    h_value = f(h_value, (unsigned) *state_map_get(*it, state_abs));
   }
   free(state_str);
   return h_value;
@@ -267,7 +267,7 @@ unsigned pdb_hanois(state_t *state) {
     free(state_abs_str);
 
     // Agregamos el valor del estado abstraido.
-    h_value = f(h_value, (unsigned) *state_map_get(*it, state_abs);
+    h_value = f(h_value, (unsigned) *state_map_get(*it, state_abs));
   }
   free(state_str);
   return h_value;

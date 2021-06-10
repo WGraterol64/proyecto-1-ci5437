@@ -31,31 +31,72 @@ int main(void) {
   cout <<
     "\nIndique cual \e[1;3mheuristica\e[0m quiere usar:\n"
     "  1: Manhattan (15Puzzle).\n"
-    "  2: Additive PDB (15Puzzle).\n"
-    "  3: Additive PDB (24Puzzle).\n"
-    "  4: Additive PDB (Towers of Hanoi 4P 12D).\n"
+    "  2: Usando PDBs.\n"
   ;
   if (fgets(str, sizeof(str), stdin) == NULL) {
     cout << "Error: input invalido.\n";
     return 1; 
   }
   opt = atoi(str);
-  if (opt != 1) {
-    cout << "Indique la direccion del directorio donde se encuentran los PDB: ";
-    fflush(stdout);
-    if (fgets(str, sizeof(str), stdin) == NULL) {
-      cout << "Error: input invalido.\n";
-      return 1; 
-    }
-    // Eliminamos el salto de linea.
-    str[strlen(str)-1] = '\0';
-    init_pdbs(str);
-  }
   switch(opt) {
     case 1: h = manhattan; break;
-    case 2: h = additive_pdb_15puzzle; break;
-    case 3: h = additive_pdb_24puzzle; break;
-    case 4: h = additive_pdb_hanoi12D; break;
+
+    case 2: 
+      cout << "Indique la direccion del directorio donde se encuentran los PDB: ";
+      fflush(stdout);
+      if (fgets(str, sizeof(str), stdin) == NULL) {
+        cout << "Error: input invalido.\n";
+        return 1; 
+      }
+      // Eliminamos el salto de linea.
+      str[strlen(str)-1] = '\0';
+      init_pdbs(str);
+
+      // Indicar si las heuristicas son aditivas o no.
+      cout <<
+        "\nIndique si la heuristica es aditiva o no:\n"
+        "  1: Si\n"
+        "  2: No\n"
+      ;
+      if (fgets(str, sizeof(str), stdin) == NULL) {
+        cout << "Error: input invalido.\n";
+        return 1; 
+      }
+      opt = atoi(str);
+      switch(opt) {
+        case 1: set_sum(); break;
+        case 2: set_max(); break;
+        default:
+          cout << "Opcion invalida.\n";
+          exit(1);
+      }
+
+      // Seleccionar el puzzle.
+      cout <<
+        "\nIndique el puzzle:\n"
+        "  1: 15Puzzle\n"
+        "  2: 24Puzzle\n"
+        "  3: Torres de Hanoi con 12 Discos\n"
+        "  4: Torres de Hanoi con 14 Discos\n"
+        "  5: Torres de Hanoi con 18 Discos\n"
+      ;
+      if (fgets(str, sizeof(str), stdin) == NULL) {
+        cout << "Error: input invalido.\n";
+        return 1; 
+      }
+      opt = atoi(str);
+      switch(opt) {
+        case 1: set_15puzzle(); h = pdb_Npuzzle; break;
+        case 2: set_24puzzle(); h = pdb_Npuzzle; break;
+        case 3: set_hanois12D(); h = pdb_hanois; break;
+        case 4: set_hanois14D(); h = pdb_hanois; break;
+        case 5: set_hanois18D(); h = pdb_hanois; break;
+        default:
+          cout << "Opcion invalida.\n";
+          exit(1);
+      }
+      break;
+    
     default:
       cout << "Opcion invalida.\n";
       exit(1);
