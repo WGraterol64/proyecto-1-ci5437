@@ -3,6 +3,12 @@
 /* ===================== VARIABLES GLOBALES ===================== */
 // Almacenara cada pdb del puzzle.
 vector<state_map_t*> pdbs;
+// f indicara si las pdbs se sumaran o se tomara el maximo.
+unsigned (*f) (unsigned, unsigned);
+
+// Almacenara la particion que se usara para NPuzzle.
+string **partition_Npuzzle;
+int dim;
 // Particion del 15puzzle
 string partition_15puzzle[4][4] = {
   {"10", "11", "14", "15"},
@@ -18,17 +24,41 @@ string partition_24puzzle[5][5] = {
   {"13", "18", "19", "23", "24"},
   {"17", "20", "21", "22", "-1"}
 };
+
+// Almacenara la particion que se usara para las torres de hanoi.
+pair<int,int> *partition_hanois;
 pair<int,int> partition_hanois12D[2] = {
+  {24, 47},
+  {0, 23}
+};
+pair<int,int> partition_hanois14D[2] = {
+  {28, 55},
+  {0, 27}
+};
+pair<int,int> partition_hanois18D[2] = {
+  {48, 71},
   {24, 47},
   {0, 23}
 };
 
 /* ===================== FUNCIONES AUXILIARES ===================== */
-/* Valor absoluto. */
 unsigned abs(unsigned x) { 
   if (x < 0) return -x;
   return x;
 }
+
+unsigned max_h(unsigned h, unsigned h_i) {
+  if (h > h_i) return h;
+  return h_i
+}
+
+unsigned sum_h(unsigned h, unsigned h_i) {
+  return h + h_i;
+}
+
+void set_max(void) { f = max_h; }
+
+void set_sum(void) { f = sum_h; }
 
 /* Inicializa los pdbs que se usaran en la heuristica. */
 void init_pdbs(char *dir_name) {
@@ -111,6 +141,10 @@ char *make_state_abs_NPuzzle(char *state, string *block, int block_len, string d
   return state_copy;
 }
 
+void set_15puzzle(void) { partition_Npuzzle = partition_15puzzle; dim = 4; }
+
+void set_24puzzle(void) { partition_Npuzzle = partition_24puzzle; dim = 5; }
+
 /*
   Crea un estado abstracto para las torres de hanois indicandole el bloque de tokens que 
   se mantendran.
@@ -150,6 +184,12 @@ char *make_state_abs_hanois(char *state, pair<int, int> block) {
   return state_copy;
 }
 
+void set_hanois12D(void) { partition_hanois = partition_hanois12D; }
+
+void set_hanois14D(void) { partition_hanois = partition_hanois14D; }
+
+void set_hanois18D(void) { partition_hanois = partition_hanois18D; }
+
 /* ===================== HEURISTICAS ===================== */
 /* Distancia Manhattan. */
 unsigned manhattan(state_t *state) { 
@@ -176,8 +216,8 @@ unsigned manhattan(state_t *state) {
 }
 
 
-/* Additive pdbs 15puzzle. */
-unsigned additive_pdb_15puzzle(state_t *state) {
+/* Heuristic with pdbs 15puzzle. */
+unsigned pdb_Npuzzle(state_t *state) {
   state_t *state_abs = new state_t;
   unsigned h_value = 0;
   int index = 0;
@@ -193,20 +233,20 @@ unsigned additive_pdb_15puzzle(state_t *state) {
     sprint_state(state_str, MAX_STATE_LEN, state);
 
     // Creamos un estado a partir de la abstraccion.
-    state_abs_str = make_state_abs_NPuzzle(state_str, partition_15puzzle[index++], 4, "B");
+    state_abs_str = make_state_abs_NPuzzle(state_str, partition_Npuzzle[index++], dim, "B");
     read_state(state_abs_str, state_abs);
     free(state_abs_str);
 
     // Agregamos el valor del estado abstraido.
-    h_value += (unsigned) *state_map_get(*it, state_abs);
+    h_value = f(h_value, (unsigned) *state_map_get(*it, state_abs);
   }
   free(state_str);
   return h_value;
 }
 
 
-/* Additive pdbs 24puzzle. */
-unsigned additive_pdb_24puzzle(state_t *state) {
+/* Heuristic with pdbs towers of hanoi 4P 12D. */
+unsigned pdb_hanois(state_t *state) {
   state_t *state_abs = new state_t;
   unsigned h_value = 0;
   int index = 0;
@@ -222,40 +262,12 @@ unsigned additive_pdb_24puzzle(state_t *state) {
     sprint_state(state_str, MAX_STATE_LEN, state);
 
     // Creamos un estado a partir de la abstraccion.
-    state_abs_str = make_state_abs_NPuzzle(state_str, partition_24puzzle[index++], 5, "B");
+    state_abs_str = make_state_abs_hanois(state_str, partition_hanois[index++]);
     read_state(state_abs_str, state_abs);
     free(state_abs_str);
 
     // Agregamos el valor del estado abstraido.
-    h_value += (unsigned) *state_map_get(*it, state_abs);
-  }
-  free(state_str);
-  return h_value;
-}
-
-/* Additive pdbs towers of hanoi 4P 12D. */
-unsigned additive_pdb_hanoi12D(state_t *state) {
-  state_t *state_abs = new state_t;
-  unsigned h_value = 0;
-  int index = 0;
-  char *state_str = (char*) calloc(MAX_STATE_LEN, sizeof(char)); 
-  char *state_abs_str;
-
-  // Guardamos el estado en un string.
-  sprint_state(state_str, MAX_STATE_LEN, state);
-
-  // Sumamos las heuristicas.
-  for (vector<state_map_t*>::iterator it = pdbs.begin(); it != pdbs.end(); it++) {
-    // Guardamos el estado en un string.
-    sprint_state(state_str, MAX_STATE_LEN, state);
-
-    // Creamos un estado a partir de la abstraccion.
-    state_abs_str = make_state_abs_hanois(state_str, partition_hanois12D[index++]);
-    read_state(state_abs_str, state_abs);
-    free(state_abs_str);
-
-    // Agregamos el valor del estado abstraido.
-    h_value += (unsigned) *state_map_get(*it, state_abs);
+    h_value = f(h_value, (unsigned) *state_map_get(*it, state_abs);
   }
   free(state_str);
   return h_value;
