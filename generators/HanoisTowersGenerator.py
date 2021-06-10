@@ -24,7 +24,7 @@ f'# In the Towers of Hanoi puzzle there are P distinct pegs and D disks, each di
 # States.
 psvn += \
 f'# A state is a binary vector of length {P * D} \n\
-{P * D}\n' + '2 ' * (P * D) + '\n\n'
+{P * D}\n' + ('2 ' * P + ' ') * D + '\n\n'
 
 # Rules.
 for i in range(D):
