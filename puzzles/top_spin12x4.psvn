@@ -12,7 +12,7 @@
 
 # Domain called "token" consisting of 12 constants. 
 DOMAIN token 12 
-0 1 2 3 4 5 6 7 8 9 10 11 
+1 2 3 4 5 6 7 8 9 10 11 12 
 
 # A state is a vector of length 12 
 12 token token token token token token token token token token token token 
@@ -30,4 +30,4 @@ X3 -  -  -  -  -  -  -  -  X0 X1 X2  =>  X0 -  -  -  -  -  -  -  -  X3 X2 X1   L
 X2 X3 -  -  -  -  -  -  -  -  X0 X1  =>  X1 X0 -  -  -  -  -  -  -  -  X3 X2   LABEL R10_1 
 X1 X2 X3 -  -  -  -  -  -  -  -  X0  =>  X2 X1 X0 -  -  -  -  -  -  -  -  X3   LABEL R11_2 
 
-GOAL 0 1 2 3 4 5 6 7 8 9 10 11 
+GOAL 1 2 3 4 5 6 7 8 9 10 11 12 
