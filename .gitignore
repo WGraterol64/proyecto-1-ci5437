@@ -1,0 +1,6 @@
+# Ignoramos los PDB porque pueden llegar a ser muy pesados.
+*.state_map
+*.pdb 
+# Ignoramos los binarios
+*.out
+*.json
