@@ -18,6 +18,10 @@ string partition_24puzzle[5][5] = {
   {"13", "18", "19", "23", "24"},
   {"17", "20", "21", "22", "-1"}
 };
+pair<int,int> partition_hanois12D[2] = {
+  {24, 47},
+  {0, 23}
+};
 
 /* ===================== FUNCIONES AUXILIARES ===================== */
 /* Valor absoluto. */
@@ -58,8 +62,8 @@ void init_pdbs(char *dir_name) {
 }
 
 /*
-  Crea un estado abstracto indicandole la particion de tokens que se mantendran
-  y el token por defecto que sustituira al resto.
+  Crea un estado abstracto para NPuzzle indicandole la particion de tokens que 
+  se mantendran y el token por defecto que sustituira al resto.
 
   INPUTS:
     char *state           =>  Estado original.
@@ -70,7 +74,7 @@ void init_pdbs(char *dir_name) {
   OUTPUT:
     char* =>  Estado abstraido.
 */
-char *make_state_abs(char *state, string *block, int block_len, string default_token) {
+char *make_state_abs_NPuzzle(char *state, string *block, int block_len, string default_token) {
   // Copiamos el estado.
   char *state_copy = (char*) calloc(MAX_STATE_LEN, sizeof(char));
   strcpy(state_copy, state);
@@ -107,14 +111,51 @@ char *make_state_abs(char *state, string *block, int block_len, string default_t
   return state_copy;
 }
 
+/*
+  Crea un estado abstracto para las torres de hanois indicandole el bloque de tokens que 
+  se mantendran.
 
+  INPUTS:
+    char *state           =>  Estado original.
+    pair<int, int> block  =>  Bloque que se mantendra.
+  OUTPUT:
+    char* =>  Estado abstraido.
+*/
+char *make_state_abs_hanois(char *state, pair<int, int> block) {
+  // Copiamos el estado.
+  char *state_copy = (char*) calloc(MAX_STATE_LEN, sizeof(char));
+  strcpy(state_copy, state);
+  int index = 0;
+  string state_abs = "";
+
+  // Obtenemos el primer token.
+  char *token = strtok(state_copy, " ");
+
+  // Por cada token.
+  while (token != NULL) {
+    // Si es esta dentro del bloque, lo agregamos al estado abstraido.
+    if (block.first <= index && index <= block.second) {
+      string str(token);
+      state_abs += str;
+    } else {
+      state_abs += "0";
+    }
+    // Agregamos un espacio para separar lo tokens.
+    state_abs += " ";
+
+    token = strtok(NULL, " ");
+    index++;
+  }
+  strcpy(state_copy, state_abs.c_str());
+  return state_copy;
+}
 
 /* ===================== HEURISTICAS ===================== */
 /* Distancia Manhattan. */
 unsigned manhattan(state_t *state) { 
   // Obtenemos la representacion del estado en char*.
-  char s[100];
-  sprint_state(s, 100, state);
+  char s[MAX_STATE_LEN];
+  sprint_state(s, MAX_STATE_LEN, state);
   char *token, *rest = s;
   int val, result = 0, index = 0;
 
@@ -144,15 +185,15 @@ unsigned additive_pdb_15puzzle(state_t *state) {
   char *state_abs_str;
 
   // Guardamos el estado en un string.
-  sprint_state(state_str, 100, state);
+  sprint_state(state_str, MAX_STATE_LEN, state);
 
   // Sumamos las heuristicas.
   for (vector<state_map_t*>::iterator it = pdbs.begin(); it != pdbs.end(); it++) {
     // Guardamos el estado en un string.
-    sprint_state(state_str, 100, state);
+    sprint_state(state_str, MAX_STATE_LEN, state);
 
     // Creamos un estado a partir de la abstraccion.
-    state_abs_str = make_state_abs(state_str, partition_15puzzle[index++], 4, "B");
+    state_abs_str = make_state_abs_NPuzzle(state_str, partition_15puzzle[index++], 4, "B");
     read_state(state_abs_str, state_abs);
     free(state_abs_str);
 
@@ -173,15 +214,43 @@ unsigned additive_pdb_24puzzle(state_t *state) {
   char *state_abs_str;
 
   // Guardamos el estado en un string.
-  sprint_state(state_str, 100, state);
+  sprint_state(state_str, MAX_STATE_LEN, state);
 
   // Sumamos las heuristicas.
   for (vector<state_map_t*>::iterator it = pdbs.begin(); it != pdbs.end(); it++) {
     // Guardamos el estado en un string.
-    sprint_state(state_str, 100, state);
+    sprint_state(state_str, MAX_STATE_LEN, state);
 
     // Creamos un estado a partir de la abstraccion.
-    state_abs_str = make_state_abs(state_str, partition_24puzzle[index++], 5, "B");
+    state_abs_str = make_state_abs_NPuzzle(state_str, partition_24puzzle[index++], 5, "B");
+    read_state(state_abs_str, state_abs);
+    free(state_abs_str);
+
+    // Agregamos el valor del estado abstraido.
+    h_value += (unsigned) *state_map_get(*it, state_abs);
+  }
+  free(state_str);
+  return h_value;
+}
+
+/* Additive pdbs towers of hanoi 4P 12D. */
+unsigned additive_pdb_hanoi12D(state_t *state) {
+  state_t *state_abs = new state_t;
+  unsigned h_value = 0;
+  int index = 0;
+  char *state_str = (char*) calloc(MAX_STATE_LEN, sizeof(char)); 
+  char *state_abs_str;
+
+  // Guardamos el estado en un string.
+  sprint_state(state_str, MAX_STATE_LEN, state);
+
+  // Sumamos las heuristicas.
+  for (vector<state_map_t*>::iterator it = pdbs.begin(); it != pdbs.end(); it++) {
+    // Guardamos el estado en un string.
+    sprint_state(state_str, MAX_STATE_LEN, state);
+
+    // Creamos un estado a partir de la abstraccion.
+    state_abs_str = make_state_abs_hanois(state_str, partition_hanois12D[index++]);
     read_state(state_abs_str, state_abs);
     free(state_abs_str);
 

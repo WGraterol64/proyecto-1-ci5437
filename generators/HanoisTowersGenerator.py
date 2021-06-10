@@ -59,6 +59,6 @@ for i in range(D):
 
 # Goal
 psvn += '\n# The goal is that all disks are in the last peg.\n'
-psvn += 'GOAL ' + ('0 ' * (P - 1) + '1  ') * D
+psvn += 'GOAL ' + ('1 ' + '0 ' * (P - 1) + ' ') * D
 
 print(psvn)

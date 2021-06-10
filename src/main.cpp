@@ -32,41 +32,30 @@ int main(void) {
     "\nIndique cual \e[1;3mheuristica\e[0m quiere usar:\n"
     "  1: Manhattan (15Puzzle).\n"
     "  2: Additive PDB (15Puzzle).\n"
-    "  2: Additive PDB (24Puzzle).\n"
+    "  3: Additive PDB (24Puzzle).\n"
+    "  4: Additive PDB (Towers of Hanoi 4P 12D).\n"
   ;
   if (fgets(str, sizeof(str), stdin) == NULL) {
     cout << "Error: input invalido.\n";
     return 1; 
   }
   opt = atoi(str);
+  if (opt != 1) {
+    cout << "Indique la direccion del directorio donde se encuentran los PDB: ";
+    fflush(stdout);
+    if (fgets(str, sizeof(str), stdin) == NULL) {
+      cout << "Error: input invalido.\n";
+      return 1; 
+    }
+    // Eliminamos el salto de linea.
+    str[strlen(str)-1] = '\0';
+    init_pdbs(str);
+  }
   switch(opt) {
-    case 1: 
-      h = manhattan;
-      break;
-    case 2:
-      cout << "Indique la direccion del directorio donde se encuentran los PDB: ";
-      fflush(stdout);
-      if (fgets(str, sizeof(str), stdin) == NULL) {
-        cout << "Error: input invalido.\n";
-        return 1; 
-      }
-      // Eliminamos el salto de linea.
-      str[strlen(str)-1] = '\0';
-      init_pdbs(str);
-      h = additive_pdb_15puzzle;
-      break;
-    case 3:
-      cout << "Indique la direccion del directorio donde se encuentran los PDB: ";
-      fflush(stdout);
-      if (fgets(str, sizeof(str), stdin) == NULL) {
-        cout << "Error: input invalido.\n";
-        return 1; 
-      }
-      // Eliminamos el salto de linea.
-      str[strlen(str)-1] = '\0';
-      init_pdbs(str);
-      h = additive_pdb_24puzzle;
-      break;
+    case 1: h = manhattan; break;
+    case 2: h = additive_pdb_15puzzle; break;
+    case 3: h = additive_pdb_24puzzle; break;
+    case 4: h = additive_pdb_hanoi12D; break;
     default:
       cout << "Opcion invalida.\n";
       exit(1);

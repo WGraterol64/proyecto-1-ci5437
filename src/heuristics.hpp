@@ -21,3 +21,5 @@ void init_pdbs(char *dir_name);
 unsigned additive_pdb_15puzzle(state_t *state);
 // Obtenemos la suma de las heuristicas pdb para 24puzzle.
 unsigned additive_pdb_24puzzle(state_t *state);
+// Obtenemos la suma de las heuristicas pdb para las torres de hanoi 4P 12D.
+unsigned additive_pdb_hanoi12D(state_t *state);
