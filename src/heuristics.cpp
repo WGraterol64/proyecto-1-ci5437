@@ -4,11 +4,19 @@
 // Almacenara cada pdb del puzzle.
 vector<state_map_t*> pdbs;
 // Particion del 15puzzle
-string partition[4][4] = {
+string partition_15puzzle[4][4] = {
   {"10", "11", "14", "15"},
   {"2", "3", "6", "7"}, 
   {"1", "4", "5", "-1"}, 
   {"8", "9", "12", "13"}
+};
+// Particion del 24puzzle
+string partition_24puzzle[5][5] = {
+  {"1", "2", "5", "6", "7"},
+  {"3", "4", "8", "9", "14"}, 
+  {"10", "11", "12", "15", "16"}, 
+  {"13", "18", "19", "23", "24"},
+  {"17", "20", "21", "22", "-1"}
 };
 
 /* ===================== FUNCIONES AUXILIARES ===================== */
@@ -127,7 +135,7 @@ unsigned manhattan(state_t *state) {
 }
 
 
-/* Additive pdbs. */
+/* Additive pdbs 15puzzle. */
 unsigned additive_pdb_15puzzle(state_t *state) {
   state_t *state_abs = new state_t;
   unsigned h_value = 0;
@@ -144,7 +152,7 @@ unsigned additive_pdb_15puzzle(state_t *state) {
     sprint_state(state_str, 100, state);
 
     // Creamos un estado a partir de la abstraccion.
-    state_abs_str = make_state_abs(state_str, partition[index++], 4, "B");
+    state_abs_str = make_state_abs(state_str, partition_15puzzle[index++], 4, "B");
     read_state(state_abs_str, state_abs);
     free(state_abs_str);
 
@@ -155,13 +163,31 @@ unsigned additive_pdb_15puzzle(state_t *state) {
   return h_value;
 }
 
-/* Non-additive pdbs. */
-unsigned non_additive_pdb(state_t *state) {
-  unsigned h_i, h = 0;
-  // Obtenemos el maximo de las heuristicas.
+
+/* Additive pdbs 24puzzle. */
+unsigned additive_pdb_24puzzle(state_t *state) {
+  state_t *state_abs = new state_t;
+  unsigned h_value = 0;
+  int index = 0;
+  char *state_str = (char*) calloc(MAX_STATE_LEN, sizeof(char)); 
+  char *state_abs_str;
+
+  // Guardamos el estado en un string.
+  sprint_state(state_str, 100, state);
+
+  // Sumamos las heuristicas.
   for (vector<state_map_t*>::iterator it = pdbs.begin(); it != pdbs.end(); it++) {
-    h_i = (unsigned) *state_map_get(*it, state);
-    if (h_i > h) h = h_i; 
+    // Guardamos el estado en un string.
+    sprint_state(state_str, 100, state);
+
+    // Creamos un estado a partir de la abstraccion.
+    state_abs_str = make_state_abs(state_str, partition_24puzzle[index++], 5, "B");
+    read_state(state_abs_str, state_abs);
+    free(state_abs_str);
+
+    // Agregamos el valor del estado abstraido.
+    h_value += (unsigned) *state_map_get(*it, state_abs);
   }
-  return h;
+  free(state_str);
+  return h_value;
 }
