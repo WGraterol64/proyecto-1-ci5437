@@ -294,9 +294,11 @@ char *make_state_abs_rubik(char *state, pair<bool, vector<string>> block) {
          break;
         }
       }
-    } 
-    if (! find) {
-      state_abs += "N";
+      if (! find) {
+        state_abs += "N";
+      }
+    } else {
+      state_abs += "0";
     }
     // Agregamos un espacio para separar lo tokens.
     state_abs += " ";
