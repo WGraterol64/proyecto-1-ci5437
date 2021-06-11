@@ -295,7 +295,7 @@ char *make_state_abs_rubik(char *state, pair<bool, vector<string>> block) {
         }
       }
       if (! find) {
-        state_abs += "N";
+        state_abs += "0";
       }
     } else {
       state_abs += "0";

@@ -22,7 +22,7 @@
 # used for naming the directions in this file may not be the most intuitive one for you.
 
 DOMAIN colour 7
-       R G B Y O W N
+       R G B Y O W 0
 
 48
 
