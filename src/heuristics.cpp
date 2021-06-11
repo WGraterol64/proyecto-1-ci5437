@@ -59,12 +59,12 @@ pair<int,int> partition_topspin17[3] = {
 
 // Almacena la particion del cubo de rubik.
 pair<bool, vector<string>> partition_rubik[6] = {
-  {false, {"R", "G"}},
-  {false, {"B", "Y"}},
-  {false, {"O", "W"}},
-  {true,  {"R", "G"}},
-  {true,  {"B", "Y"}},
-  {true,  {"O", "W"}}
+  {true, {"O", "W"}},
+  {true, {"R", "G"}},
+  {false,  {"B", "Y"}},
+  {false,  {"O", "W"}},
+  {false,  {"R", "G"}},
+  {true, {"B", "Y"}}
 };
 
 /* ===================== FUNCIONES AUXILIARES ===================== */
@@ -273,7 +273,7 @@ char *make_state_abs_rubik(char *state, pair<bool, vector<string>> block) {
   char *state_copy = (char*) calloc(MAX_STATE_LEN, sizeof(char));
   strcpy(state_copy, state);
   string state_abs = "";
-  int index = 0;
+  int index = 1;
   bool find;
 
   // Obtenemos el primer token.
