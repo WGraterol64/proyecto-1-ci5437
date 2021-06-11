@@ -57,6 +57,14 @@ pair<int,int> partition_topspin17[3] = {
   {13, 17}
 };
 
+// Almacena la particion del cubo de rubik.
+pair<bool, vector<string>> partition_rubik[4] = {
+  {true,  {"RED", "GREEN", "BLUE"}},
+  {false, {"RED", "GREEN", "BLUE"}},
+  {true,  {"YELLOW", "ORANGE", "WHITE"}},
+  {false,  {"YELLOW", "ORANGE", "WHITE"}}
+};
+
 /* ===================== FUNCIONES AUXILIARES ===================== */
 unsigned abs(unsigned x) { return (x < 0)? -x : x; }
 
@@ -247,6 +255,56 @@ void set_topspin14(void) { partition_topspin = partition_topspin14; }
 void set_topspin17(void) { partition_topspin = partition_topspin17; }
 
 
+/*
+  Crea un estado abstracto para el cubo de rubik indicandole si es o no
+  una esquina y cuales colores estan permitidos.
+
+  INPUTS:
+    char *state                       =>  Estado original.
+    pair<bool, vector<string>> block  =>  Par que indica si es ono una esquina
+        y los colores permitidos.
+  OUTPUT:
+    char* =>  Estado abstraido.
+*/
+char *make_state_abs_rubik(char *state, pair<bool, vector<string>> block) {
+  // Copiamos el estado.
+  char *state_copy = (char*) calloc(MAX_STATE_LEN, sizeof(char));
+  strcpy(state_copy, state);
+  string state_abs = "";
+  int index = 0;
+  bool find;
+
+  // Obtenemos el primer token.
+  char *token = strtok(state_copy, " ");
+
+  // Por cada token.
+  while (token != NULL) {
+    // Si es esta dentro del bloque, lo agregamos al estado abstraido.
+    // Para ello verificamos si coincide con ser o no una esquina y si
+    // es de uno de los colores del bloque.
+    find = false;
+    if (block.first == (index++ % 2 == 0)) {
+      string str(token);
+      for (string color : block.second) {
+        if (str == color) {
+         state_abs += str;
+         find = true;
+         break;
+        }
+      }
+    } 
+    if (! find) {
+      state_abs += "BLACK";
+    }
+    // Agregamos un espacio para separar lo tokens.
+    state_abs += " ";
+
+    token = strtok(NULL, " ");
+  }
+  strcpy(state_copy, state_abs.c_str());
+  return state_copy;
+}
+
 /* ===================== HEURISTICAS ===================== */
 /* Distancia Manhattan. */
 unsigned manhattan(state_t *state) { 
@@ -349,6 +407,35 @@ unsigned pdb_topspin(state_t *state) {
 
     // Creamos un estado a partir de la abstraccion.
     state_abs_str = make_state_abs_topspin(state_str, partition_topspin[index++]);
+    read_state(state_abs_str, state_abs);
+    free(state_abs_str);
+
+    // Agregamos el valor del estado abstraido.
+    h_value = f(h_value, (unsigned) *state_map_get(*it, state_abs));
+  }
+  free(state_str);
+  return h_value;
+}
+
+
+/* Heuristic with pdbs rubiks cube. */
+unsigned pdb_rubik(state_t *state) {
+  state_t *state_abs = new state_t;
+  unsigned h_value = 0;
+  int index = 0;
+  char *state_str = (char*) calloc(MAX_STATE_LEN, sizeof(char)); 
+  char *state_abs_str;
+
+  // Guardamos el estado en un string.
+  sprint_state(state_str, MAX_STATE_LEN, state);
+
+  // Sumamos las heuristicas.
+  for (vector<state_map_t*>::iterator it = pdbs.begin(); it != pdbs.end(); it++) {
+    // Guardamos el estado en un string.
+    sprint_state(state_str, MAX_STATE_LEN, state);
+
+    // Creamos un estado a partir de la abstraccion.
+    state_abs_str = make_state_abs_rubik(state_str, partition_rubik[index++]);
     read_state(state_abs_str, state_abs);
     free(state_abs_str);
 
