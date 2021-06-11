@@ -430,6 +430,7 @@ unsigned pdb_rubik(state_t *state) {
 
   // Guardamos el estado en un string.
   sprint_state(state_str, MAX_STATE_LEN, state);
+  cout << "STATE: " << state_str << "\n";
 
   // Sumamos las heuristicas.
   for (vector<state_map_t*>::iterator it = pdbs.begin(); it != pdbs.end(); it++) {
@@ -438,6 +439,7 @@ unsigned pdb_rubik(state_t *state) {
 
     // Creamos un estado a partir de la abstraccion.
     state_abs_str = make_state_abs_rubik(state_str, partition_rubik[index++]);
+    cout << "ABS: " << state_abs_str << "\n";
     read_state(state_abs_str, state_abs);
     free(state_abs_str);
 
