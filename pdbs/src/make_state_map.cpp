@@ -1,11 +1,13 @@
 #include <iostream>
 #include <cstring>
 
+#define MAX_STATE_LEN 512
+
 using namespace std;
 
 void add_state(state_map_t *state_map, char *entry) {
   // Obtenemos la representacion del estado en char*.
-  char s[100];
+  char s[MAX_STATE_LEN];
   char *value, *state_str;
   state_t *state = new state_t;
 
