@@ -273,7 +273,7 @@ Node *best_first_search_late_dup_pruning(
   Node* node = new Node(s_init);
   q.add(node);
 
-  // En explored almacenaremos los nodos visitados, su color y su costo parcial.
+  // En explored almacenaremos los estados visitados y su costo parcial.
   map<uint64_t, unsigned> explored;
   
   // Variables para iterar a traves de los sucesores de un determinado estado.

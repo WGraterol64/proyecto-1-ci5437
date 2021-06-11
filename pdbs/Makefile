@@ -29,8 +29,6 @@ psvn2c_abstraction.c:
 %.c: psvn2c_core.c psvn2c_state_map.c psvn2c_abstraction.c
 	$(ROOT)/bin/psvn2c $(PSVNOPT) --name=$* < $*.psvn > $@
 
-
-
 clean:
 	rm -f *.c *.abst *.psvn *.out *.pdb *.dist
 
