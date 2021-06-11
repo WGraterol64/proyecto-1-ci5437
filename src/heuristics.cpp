@@ -41,20 +41,28 @@ pair<int,int> partition_hanois18D[3] = {
   {0, 23}
 };
 
+// Almacenara la particion que se usara para top spin.
+pair<int,int> *partition_topspin;
+pair<int,int> partition_topspin12[2] = {
+  {7, 12},
+  {1, 6}
+};
+pair<int,int> partition_topspin14[2] = {
+  {1, 7},
+  {8, 14}
+};
+pair<int,int> partition_topspin17[3] = {
+  {1, 6},
+  {7, 12},
+  {13, 17}
+};
+
 /* ===================== FUNCIONES AUXILIARES ===================== */
-unsigned abs(unsigned x) { 
-  if (x < 0) return -x;
-  return x;
-}
+unsigned abs(unsigned x) { return (x < 0)? -x : x; }
 
-unsigned max_h(unsigned h, unsigned h_i) {
-  if (h > h_i) return h;
-  return h_i;
-}
+unsigned max_h(unsigned h, unsigned h_i) { return (h > h_i) ? h : h_i; }
 
-unsigned sum_h(unsigned h, unsigned h_i) {
-  return h + h_i;
-}
+unsigned sum_h(unsigned h, unsigned h_i) { return h + h_i; }
 
 void set_max(void) { f = max_h; }
 
@@ -90,6 +98,7 @@ void init_pdbs(char *dir_name) {
     exit(1);
   }
 }
+
 
 /*
   Crea un estado abstracto para NPuzzle indicandole la particion de tokens que 
@@ -145,8 +154,9 @@ void set_15puzzle(void) { partition_Npuzzle = (string**) partition_15puzzle; dim
 
 void set_24puzzle(void) { partition_Npuzzle = (string**) partition_24puzzle; dim = 5; }
 
+
 /*
-  Crea un estado abstracto para las torres de hanois indicandole el bloque de tokens que 
+  Crea un estado abstracto para las torres de hanoi indicandole el bloque de tokens que 
   se mantendran.
 
   INPUTS:
@@ -189,6 +199,53 @@ void set_hanois12D(void) { partition_hanois = partition_hanois12D; }
 void set_hanois14D(void) { partition_hanois = partition_hanois14D; }
 
 void set_hanois18D(void) { partition_hanois = partition_hanois18D; }
+
+
+/*
+  Crea un estado abstracto para top spin indicandole el bloque de tokens que 
+  se mantendran.
+
+  INPUTS:
+    char *state           =>  Estado original.
+    pair<int, int> block  =>  Bloque que se mantendra.
+  OUTPUT:
+    char* =>  Estado abstraido.
+*/
+char *make_state_abs_topspin(char *state, pair<int, int> block) {
+  // Copiamos el estado.
+  char *state_copy = (char*) calloc(MAX_STATE_LEN, sizeof(char));
+  strcpy(state_copy, state);
+  string state_abs = "";
+  int token_val;
+
+  // Obtenemos el primer token.
+  char *token = strtok(state_copy, " ");
+
+  // Por cada token.
+  while (token != NULL) {
+    token_val = stoi(token);
+    // Si es esta dentro del bloque, lo agregamos al estado abstraido.
+    if (block.first <= token_val && token_val <= block.second) {
+      string str(token);
+      state_abs += str;
+    } else {
+      state_abs += "0";
+    }
+    // Agregamos un espacio para separar lo tokens.
+    state_abs += " ";
+
+    token = strtok(NULL, " ");
+  }
+  strcpy(state_copy, state_abs.c_str());
+  return state_copy;
+}
+
+void set_topspin12(void) { partition_topspin = partition_topspin12; }
+
+void set_topspin14(void) { partition_topspin = partition_topspin14; }
+
+void set_topspin17(void) { partition_topspin = partition_topspin17; }
+
 
 /* ===================== HEURISTICAS ===================== */
 /* Distancia Manhattan. */
@@ -263,6 +320,35 @@ unsigned pdb_hanois(state_t *state) {
 
     // Creamos un estado a partir de la abstraccion.
     state_abs_str = make_state_abs_hanois(state_str, partition_hanois[index++]);
+    read_state(state_abs_str, state_abs);
+    free(state_abs_str);
+
+    // Agregamos el valor del estado abstraido.
+    h_value = f(h_value, (unsigned) *state_map_get(*it, state_abs));
+  }
+  free(state_str);
+  return h_value;
+}
+
+
+/* Heuristic with pdbs top spin. */
+unsigned pdb_topspin(state_t *state) {
+  state_t *state_abs = new state_t;
+  unsigned h_value = 0;
+  int index = 0;
+  char *state_str = (char*) calloc(MAX_STATE_LEN, sizeof(char)); 
+  char *state_abs_str;
+
+  // Guardamos el estado en un string.
+  sprint_state(state_str, MAX_STATE_LEN, state);
+
+  // Sumamos las heuristicas.
+  for (vector<state_map_t*>::iterator it = pdbs.begin(); it != pdbs.end(); it++) {
+    // Guardamos el estado en un string.
+    sprint_state(state_str, MAX_STATE_LEN, state);
+
+    // Creamos un estado a partir de la abstraccion.
+    state_abs_str = make_state_abs_topspin(state_str, partition_topspin[index++]);
     read_state(state_abs_str, state_abs);
     free(state_abs_str);
 

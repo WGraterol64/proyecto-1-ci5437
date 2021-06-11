@@ -34,3 +34,10 @@ void set_hanois14D(void);
 void set_hanois18D(void);
 // Heuristica con pdbs para las torres de hanoi.
 unsigned pdb_hanois(state_t *state);
+
+// Para establecer cuantos discos se usaran en la torre de hanoi.
+void set_topspin12(void);
+void set_topspin14(void);
+void set_topspin17(void);
+// Heuristica con pdbs para las torres de hanoi.
+unsigned pdb_topspin(state_t *state);

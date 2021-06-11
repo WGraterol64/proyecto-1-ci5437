@@ -12,7 +12,7 @@ CXX = g++
 	./$*.dist > $*.pdb
 	$(CXX) $(OPT) ./src/make_state_map.cpp --include $*.c -o ./make_state_map_$*.out 
 	./make_state_map_$*.out $*.pdb $*.state_map
-	make clean
+	# make clean
 
 %.out:
 	$(CXX) $(OPT) $(ROOT)/src/abstractor.cpp $(ROOT)/src/psvn.cpp -o $*.out

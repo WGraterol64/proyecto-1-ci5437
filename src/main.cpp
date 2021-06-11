@@ -79,6 +79,9 @@ int main(void) {
         "  3: Torres de Hanoi con 12 Discos\n"
         "  4: Torres de Hanoi con 14 Discos\n"
         "  5: Torres de Hanoi con 18 Discos\n"
+        "  6: Top Spin de longitud 12\n"
+        "  7: Top Spin de longitud 14\n"
+        "  8: Top Spin de longitud 17\n"
       ;
       if (fgets(str, sizeof(str), stdin) == NULL) {
         cout << "Error: input invalido.\n";
@@ -91,6 +94,9 @@ int main(void) {
         case 3: set_hanois12D(); h = pdb_hanois; break;
         case 4: set_hanois14D(); h = pdb_hanois; break;
         case 5: set_hanois18D(); h = pdb_hanois; break;
+        case 6: set_topspin12(); h = pdb_topspin; break;
+        case 7: set_topspin14(); h = pdb_topspin; break;
+        case 8: set_topspin17(); h = pdb_topspin; break;
         default:
           cout << "Opcion invalida.\n";
           exit(1);
