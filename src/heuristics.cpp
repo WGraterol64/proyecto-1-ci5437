@@ -441,7 +441,7 @@ unsigned pdb_rubik(state_t *state) {
 
     // Creamos un estado a partir de la abstraccion.
     state_abs_str = make_state_abs_rubik(state_str, partition_rubik[index++]);
-    cout << "ABS: " << state_abs_str << "\n";
+    cout << "ABS_S: " << state_abs_str << "\n";
     read_state(state_abs_str, state_abs);
     free(state_abs_str);
 
