@@ -59,12 +59,12 @@ pair<int,int> partition_topspin17[3] = {
 
 // Almacena la particion del cubo de rubik.
 pair<bool, vector<string>> partition_rubik[6] = {
-  {true, {"O", "W"}},
   {true, {"R", "G"}},
-  {false,  {"B", "Y"}},
-  {false,  {"O", "W"}},
+  {true, {"B", "Y"}},
+  {true, {"O", "W"}},
   {false,  {"R", "G"}},
-  {true, {"B", "Y"}}
+  {false,  {"B", "Y"}},
+  {false,  {"O", "W"}}
 };
 
 /* ===================== FUNCIONES AUXILIARES ===================== */
@@ -432,7 +432,6 @@ unsigned pdb_rubik(state_t *state) {
 
   // Guardamos el estado en un string.
   sprint_state(state_str, MAX_STATE_LEN, state);
-  cout << "STATE: " << state_str << "\n";
 
   // Sumamos las heuristicas.
   for (vector<state_map_t*>::iterator it = pdbs.begin(); it != pdbs.end(); it++) {
@@ -441,7 +440,6 @@ unsigned pdb_rubik(state_t *state) {
 
     // Creamos un estado a partir de la abstraccion.
     state_abs_str = make_state_abs_rubik(state_str, partition_rubik[index++]);
-    cout << "ABS_S: " << state_abs_str << "\n";
     read_state(state_abs_str, state_abs);
     free(state_abs_str);
 
