@@ -98,7 +98,7 @@ int main(void) {
         case 6: set_topspin12(); h = pdb_topspin; break;
         case 7: set_topspin14(); h = pdb_topspin; break;
         case 8: set_topspin17(); h = pdb_topspin; break;
-        case 9: h = pdb_rubik; break
+        case 9: h = pdb_rubik; break;
         default:
           cout << "Opcion invalida.\n";
           exit(1);
