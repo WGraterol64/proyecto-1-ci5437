@@ -82,6 +82,7 @@ int main(void) {
         "  6: Top Spin de longitud 12\n"
         "  7: Top Spin de longitud 14\n"
         "  8: Top Spin de longitud 17\n"
+        "  9: Cubo de Rubik\n"
       ;
       if (fgets(str, sizeof(str), stdin) == NULL) {
         cout << "Error: input invalido.\n";
@@ -97,6 +98,7 @@ int main(void) {
         case 6: set_topspin12(); h = pdb_topspin; break;
         case 7: set_topspin14(); h = pdb_topspin; break;
         case 8: set_topspin17(); h = pdb_topspin; break;
+        case 9: h = pdb_rubik; break
         default:
           cout << "Opcion invalida.\n";
           exit(1);
