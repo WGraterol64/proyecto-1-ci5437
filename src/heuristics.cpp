@@ -285,7 +285,7 @@ char *make_state_abs_rubik(char *state, pair<bool, vector<string>> block) {
     // Para ello verificamos si coincide con ser o no una esquina y si
     // es de uno de los colores del bloque.
     find = false;
-    if (block.first == (index++ % 2 == 0)) {
+    if (block.first == ((index++) % 2 == 0)) {
       string str(token);
       for (string color : block.second) {
         if (str == color) {
