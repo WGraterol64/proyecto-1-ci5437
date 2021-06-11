@@ -41,3 +41,6 @@ void set_topspin14(void);
 void set_topspin17(void);
 // Heuristica con pdbs para las torres de hanoi.
 unsigned pdb_topspin(state_t *state);
+
+// Heuristica con pdbs para el cubo de rubik.
+unsigned pdb_rubik(state_t *state);
