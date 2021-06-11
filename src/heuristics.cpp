@@ -59,12 +59,12 @@ pair<int,int> partition_topspin17[3] = {
 
 // Almacena la particion del cubo de rubik.
 pair<bool, vector<string>> partition_rubik[6] = {
-  {true,  {"B", "Y"}},
-  {true,  {"R", "G"}},
-  {true,  {"O", "W"}},
-  {false, {"O", "W"}},
-  {false, {"B", "Y"}},
-  {false, {"R", "G"}}
+  {false,  {"B", "Y"}},
+  {false,  {"R", "G"}},
+  {false,  {"O", "W"}},
+  {true, {"O", "W"}},
+  {true, {"B", "Y"}},
+  {true, {"R", "G"}}
 };
 
 /* ===================== FUNCIONES AUXILIARES ===================== */
