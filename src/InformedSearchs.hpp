@@ -17,6 +17,9 @@
 
 using namespace std;
 
+// Imprime la memoria virtual (ram y swap) usada actualmente.
+void print_memory_used(void);
+
 // Busqueda de mejor camino.
 Node *best_first_search(
   state_t *s_init, 
