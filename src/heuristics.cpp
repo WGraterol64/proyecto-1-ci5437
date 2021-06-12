@@ -347,7 +347,7 @@ unsigned manhattan(state_t *state) {
 
 /* Heuristic with pdbs 15puzzle. */
 unsigned pdb_Npuzzle(state_t *state) {
-  state_t *state_abs = new state_t;
+  state_t state_abs;
   unsigned h_value = 0;
   int index = 0;
   char *state_str = (char*) calloc(MAX_STATE_LEN, sizeof(char)); 
@@ -360,20 +360,21 @@ unsigned pdb_Npuzzle(state_t *state) {
 
     // Creamos un estado a partir de la abstraccion.
     state_abs_str = make_state_abs_NPuzzle(state_str, partition_Npuzzle[index++], dim, "B");
-    read_state(state_abs_str, state_abs);
+    read_state(state_abs_str, &state_abs);
     free(state_abs_str);
 
     // Agregamos el valor del estado abstraido.
-    h_value = f(h_value, (unsigned) *state_map_get(*it, state_abs));
+    h_value = f(h_value, (unsigned) *state_map_get(*it, &state_abs));
   }
   free(state_str);
+
   return h_value;
 }
 
 
 /* Heuristic with pdbs towers of hanoi 4P 12D. */
 unsigned pdb_hanois(state_t *state) {
-  state_t *state_abs = new state_t;
+  state_t state_abs;
   unsigned h_value = 0;
   int index = 0;
   char *state_str = (char*) calloc(MAX_STATE_LEN, sizeof(char)); 
@@ -386,11 +387,11 @@ unsigned pdb_hanois(state_t *state) {
 
     // Creamos un estado a partir de la abstraccion.
     state_abs_str = make_state_abs_hanois(state_str, partition_hanois[index++]);
-    read_state(state_abs_str, state_abs);
+    read_state(state_abs_str, &state_abs);
     free(state_abs_str);
 
     // Agregamos el valor del estado abstraido.
-    h_value = f(h_value, (unsigned) *state_map_get(*it, state_abs));
+    h_value = f(h_value, (unsigned) *state_map_get(*it, &state_abs));
   }
   free(state_str);
   return h_value;
@@ -399,7 +400,7 @@ unsigned pdb_hanois(state_t *state) {
 
 /* Heuristic with pdbs top spin. */
 unsigned pdb_topspin(state_t *state) {
-  state_t *state_abs = new state_t;
+  state_t state_abs;
   unsigned h_value = 0;
   int index = 0;
   char *state_str = (char*) calloc(MAX_STATE_LEN, sizeof(char)); 
@@ -412,11 +413,11 @@ unsigned pdb_topspin(state_t *state) {
 
     // Creamos un estado a partir de la abstraccion.
     state_abs_str = make_state_abs_topspin(state_str, partition_topspin[index++]);
-    read_state(state_abs_str, state_abs);
+    read_state(state_abs_str, &state_abs);
     free(state_abs_str);
 
     // Agregamos el valor del estado abstraido.
-    h_value = f(h_value, (unsigned) *state_map_get(*it, state_abs));
+    h_value = f(h_value, (unsigned) *state_map_get(*it, &state_abs));
   }
   free(state_str);
   return h_value;
@@ -425,7 +426,7 @@ unsigned pdb_topspin(state_t *state) {
 
 /* Heuristic with pdbs rubiks cube. */
 unsigned pdb_rubik(state_t *state) {
-  state_t *state_abs = new state_t;
+  state_t state_abs;
   unsigned h_value = 0;
   int index = 0;
   char *state_str = (char*) calloc(MAX_STATE_LEN, sizeof(char)); 
@@ -438,11 +439,11 @@ unsigned pdb_rubik(state_t *state) {
 
     // Creamos un estado a partir de la abstraccion.
     state_abs_str = make_state_abs_rubik(state_str, partition_rubik[index++]);
-    read_state(state_abs_str, state_abs);
+    read_state(state_abs_str, &state_abs);
     free(state_abs_str);
 
     // Agregamos el valor del estado abstraido.
-    h_value = f(h_value, (unsigned) *state_map_get(*it, state_abs));
+    h_value = f(h_value, (unsigned) *state_map_get(*it, &state_abs));
   }
   free(state_str);
   return h_value;
