@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <dirent.h>
+#include <algorithm>
 
 #define MAX_PDB_NAME 257
 #define MAX_STATE_LEN 513

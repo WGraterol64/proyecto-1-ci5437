@@ -303,11 +303,7 @@
       \item \verb|vector<state_map_t*> pdbs| almacena los PDBs que se usar\'an en las 
       heur\'isticas. La funci\'on \verb|init_pdbs| permite cargar todos en \verb|pdbs|
       los archivos \verb|.state_map| que se encuentren en un directorio dado como 
-      argumento. Los \verb|.state_map| no son cargados en orden alfab\'etico 
-      necesariamente, por lo que la funci\'on \verb|init_pdbs| imprime dicho orden 
-      para poder verificarlo y modificar el c\'odigo en funci\'on de eso, pues si el 
-      orden no es conocido, las heur\'isticas fallar\'an con un bello 
-      \verb|segmentation fault|.
+      argumento. Los \verb|.state_map| son cargados en orden alfab\'etico. 
 
       \item \verb|unsigned (*f) (unsigned, unsigned)| es una funci\'on que indica la 
       relaci\'on entre heur\'isticas de bloques PDB, puede tomar el valor de 
@@ -319,7 +315,8 @@
       ser de distinto tipo entre cada puzzle) que almacena la forma en que se 
       particionar\'a el puzzle para los PDBs. Es importante que el orden en el que 
       se encuentran los bloques de la partici\'on corresponda al orden en el que son 
-      cargados los PDBs en la variable \verb|pdbs|. Por cada variante de un puzzle 
+      cargados los PDBs en la variable \verb|pdbs|, en caso contrario se obtendr\'a
+      un bello y hermoso \verb|segmentation fault|. Por cada variante de un puzzle 
       existe una partici\'on correspondiente y una funci\'on que realiza la 
       asignaci\'on de la variable \verb|partition| global del puzzle gen\'erico a 
       la variable \verb|partition| del puzzle con dimensiones espec\'ificas. Por 

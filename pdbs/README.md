@@ -27,7 +27,8 @@ make P
 Y se generara un archivo `P.state_map` correspondiente al PDB de la abstraccion.
 Se recomienda crear un directorio `./P_pdbs` para almacenar los PDB para las 
 distintas abstracciones del puzzle, e identificarlas por bloque, por ejemplo
-`P.1.state_map`.
+`P.1.state_map`. Es importante el orden alfabetico de los `.state_map` pues en 
+ese orden seran cargados para correr las heuristicas.
 
 Los archivos `.state_map` no son agregados al repositorio ya que pueden llegar a ser
 muy pesados.

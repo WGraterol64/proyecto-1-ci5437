@@ -7,45 +7,45 @@ vector<state_map_t*> pdbs;
 unsigned (*f) (unsigned, unsigned);
 
 // Almacenara la particion que se usara para NPuzzle.
-string **partition_Npuzzle;
+vector<vector<int>> partition_Npuzzle;
 int dim;
 // Particion del 15puzzle
-string partition_15puzzle[4][4] = {
-  {"10", "11", "14", "15"},
-  {"2", "3", "6", "7"}, 
-  {"1", "4", "5", "-1"}, 
-  {"8", "9", "12", "13"}
+vector<vector<int>> partition_15puzzle = {
+  { 1,  4,  5, -1}, 
+  { 2,  3,  6,  7}, 
+  { 8,  9, 12, 13},
+  {10, 11, 14, 15}
 };
 // Particion del 24puzzle
-string partition_24puzzle[5][5] = {
-  {"1", "2", "5", "6", "7"},
-  {"3", "4", "8", "9", "14"}, 
-  {"10", "11", "12", "15", "16"}, 
-  {"13", "18", "19", "23", "24"},
-  {"17", "20", "21", "22", "-1"}
+vector<vector<int>> partition_24puzzle = {
+  { 1,  2,  5,  6,  7},
+  { 3,  4,  8,  9, 14}, 
+  {10, 11, 12, 15, 16}, 
+  {13, 18, 19, 23, 24},
+  {17, 20, 21, 22, -1}
 };
 
 // Almacenara la particion que se usara para las torres de hanoi.
 pair<int,int> *partition_hanois;
 pair<int,int> partition_hanois12D[2] = {
-  {24, 47},
-  {0, 23}
+  {0, 23},
+  {24, 47}
 };
 pair<int,int> partition_hanois14D[2] = {
-  {28, 55},
-  {0, 27}
+  {0, 27},
+  {28, 55}
 };
 pair<int,int> partition_hanois18D[3] = {
-  {48, 71},
+  {0, 23},
   {24, 47},
-  {0, 23}
+  {48, 71}
 };
 
 // Almacenara la particion que se usara para top spin.
 pair<int,int> *partition_topspin;
 pair<int,int> partition_topspin12[2] = {
-  {7, 12},
-  {1, 6}
+  {1, 6},
+  {7, 12}
 };
 pair<int,int> partition_topspin14[2] = {
   {1, 7},
@@ -83,6 +83,7 @@ void init_pdbs(char *dir_name) {
   DIR *dir;
   struct dirent *pdb_file;
   char path[MAX_PDB_NAME];
+  vector<string> files;
   FILE *f;
 
   // Abrimos el directorio que contiene los pdbs.
@@ -93,14 +94,23 @@ void init_pdbs(char *dir_name) {
 
       // Verificamos que el archivo no sea . ni ..
       if (strcmp(pdb_file->d_name, ".") != 0 && strcmp(pdb_file->d_name,  "..") != 0) {
-        // Almacenamos un nuevo pdb.
+        // Almacenamos el path del pdb.
         sprintf(path, "%s/%s", dir_name, pdb_file->d_name);
-        cout << "Opening " << path << "\n";
-        f = fopen(path, "r");
-        pdbs.push_back(read_state_map(f));
+        string str(path);
+        files.push_back(str);
       }
     }
     closedir(dir);
+
+    // Ordenamos el nombre de los archivos para abrirlos por orden alfabetico.
+    sort(files.begin(), files.end());
+
+    for (string file : files) {
+      cout << "Opening " << file << "\n";
+      f = fopen(file.c_str(), "r");
+      pdbs.push_back(read_state_map(f));
+      fclose(f);
+    }
 
   } else {
     /* could not open directory */
@@ -123,7 +133,7 @@ void init_pdbs(char *dir_name) {
   OUTPUT:
     char* =>  Estado abstraido.
 */
-char *make_state_abs_NPuzzle(char *state, string *block, int block_len, string default_token) {
+char *make_state_abs_NPuzzle(char *state, vector<int> block, int block_len, string default_token) {
   // Copiamos el estado.
   char *state_copy = (char*) calloc(MAX_STATE_LEN, sizeof(char));
   strcpy(state_copy, state);
@@ -140,7 +150,7 @@ char *make_state_abs_NPuzzle(char *state, string *block, int block_len, string d
     find = false;
     for (int i = 0; i < block_len; i++) {
       // Si es asi, lo agregamos al estado abstraido.
-      if (strcmp(token, block[i].c_str()) == 0) {
+      if (atoi(token) == block[i]) {
         string str(token);
         state_abs += str;
         find = true;
@@ -160,9 +170,9 @@ char *make_state_abs_NPuzzle(char *state, string *block, int block_len, string d
   return state_copy;
 }
 
-void set_15puzzle(void) { partition_Npuzzle = (string**) partition_15puzzle; dim = 4; }
+void set_15puzzle(void) { partition_Npuzzle = partition_15puzzle; dim = 4; }
 
-void set_24puzzle(void) { partition_Npuzzle = (string**) partition_24puzzle; dim = 5; }
+void set_24puzzle(void) { partition_Npuzzle = partition_24puzzle; dim = 5; }
 
 
 /*
