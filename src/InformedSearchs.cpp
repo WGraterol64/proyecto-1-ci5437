@@ -91,9 +91,6 @@ Node *best_first_search(
     state_t *s_init, 
     unsigned (*f) (Node*)
 ) {
-  // Imprimimos la memoria virtual inicial.
-  cout << "Initial memory: ";
-  print_memory_used();
   // Iniciamos el conteo del tiempo.
   start = clock();
 
@@ -168,9 +165,6 @@ Node *best_first_search_dup_pruning(
     state_t *s_init, 
     unsigned (*f) (Node*)
 ) {
-  // Imprimimos la memoria virtual inicial.
-  cout << "Initial memory: ";
-  print_memory_used();
   // Iniciamos el conteo del tiempo.
   start = clock();
 
@@ -261,9 +255,6 @@ Node *best_first_search_late_dup_pruning(
     state_t *s_init, 
     unsigned (*f) (Node*)
 ) {
-  // Imprimimos la memoria virtual inicial.
-  cout << "Initial memory: ";
-  print_memory_used();
   // Iniciamos el conteo del tiempo.
   start = clock();
 
@@ -421,9 +412,6 @@ vector<int> ida(
     unsigned (*h) (state_t*),
     bool part_pruning
 ) {
-  // Imprimimos la memoria virtual inicial.
-  cout << "Initial memory: ";
-  print_memory_used();
   // Iniciamos el conteo del tiempo.
   start = clock();
 
@@ -548,9 +536,6 @@ Node *ida_dup_pruning(
     state_t *s_init, 
     unsigned (*h) (state_t*)
 ) {
-  // Imprimimos la memoria virtual inicial.
-  cout << "Initial memory: ";
-  print_memory_used();
   // Iniciamos el conteo del tiempo.
   start = clock();
 

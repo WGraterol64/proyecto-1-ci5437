@@ -7,6 +7,10 @@ unsigned (*h) (state_t*);
 unsigned f(Node *node) { return node->g + h(node->state); }
 
 int main(void) {
+  // Imprimimos la memoria virtual inicial.
+  cout << "Initial memory: ";
+  print_memory_used();
+  
   // Variables for input.
   char str[MAX_LINE_LENGTH + 1];
   ssize_t nchars; 
