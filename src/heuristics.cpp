@@ -105,7 +105,7 @@ state_map_t* make_state_map(FILE *pdb_file) {
   while (getline(&line, &len, pdb_file) != -1) {
     add_state(state_map, line);
   }
-  fclose(f);
+  fclose(pdb_file);
 
   return state_map;
 }
