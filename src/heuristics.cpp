@@ -375,9 +375,6 @@ unsigned pdb_Npuzzle(state_t *state) {
   char *state_str = (char*) calloc(MAX_STATE_LEN, sizeof(char)); 
   char *state_abs_str;
 
-  // Guardamos el estado en un string.
-  sprint_state(state_str, MAX_STATE_LEN, state);
-
   // Sumamos las heuristicas.
   for (vector<state_map_t*>::iterator it = pdbs.begin(); it != pdbs.end(); it++) {
     // Guardamos el estado en un string.
@@ -403,9 +400,6 @@ unsigned pdb_hanois(state_t *state) {
   int index = 0;
   char *state_str = (char*) calloc(MAX_STATE_LEN, sizeof(char)); 
   char *state_abs_str;
-
-  // Guardamos el estado en un string.
-  sprint_state(state_str, MAX_STATE_LEN, state);
 
   // Sumamos las heuristicas.
   for (vector<state_map_t*>::iterator it = pdbs.begin(); it != pdbs.end(); it++) {
@@ -433,9 +427,6 @@ unsigned pdb_topspin(state_t *state) {
   char *state_str = (char*) calloc(MAX_STATE_LEN, sizeof(char)); 
   char *state_abs_str;
 
-  // Guardamos el estado en un string.
-  sprint_state(state_str, MAX_STATE_LEN, state);
-
   // Sumamos las heuristicas.
   for (vector<state_map_t*>::iterator it = pdbs.begin(); it != pdbs.end(); it++) {
     // Guardamos el estado en un string.
@@ -461,9 +452,6 @@ unsigned pdb_rubik(state_t *state) {
   int index = 0;
   char *state_str = (char*) calloc(MAX_STATE_LEN, sizeof(char)); 
   char *state_abs_str;
-
-  // Guardamos el estado en un string.
-  sprint_state(state_str, MAX_STATE_LEN, state);
 
   // Sumamos las heuristicas.
   for (vector<state_map_t*>::iterator it = pdbs.begin(); it != pdbs.end(); it++) {
