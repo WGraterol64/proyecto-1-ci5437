@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2019/dev/Debian) (preloaded format=pdflatex 2021.2.11)  11 JUN 2021 11:13
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2019/dev/Debian) (preloaded format=pdflatex 2021.2.11)  11 JUN 2021 22:47
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -377,33 +377,33 @@ Underfull \hbox (badness 10000) in paragraph at lines 255--259
  []
 
 [4]
-Overfull \hbox (2.08743pt too wide) in paragraph at lines 299--307
+Overfull \hbox (2.08743pt too wide) in paragraph at lines 303--311
 []\OT1/pcr/m/n/10 init_pdbs \OT1/pbk/l/n/10 permite cargar todos en []\OT1/pcr/m/n/10 pdbs \OT1/pbk/l/n/10 los archivos []\OT1/pcr/m/n/10 .state_map \OT1/pbk/l/n/10 que se encuentren en un directorio
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 338.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 342.
 [5]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 338.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 342.
  (/home/amin/Desktop/Inteligencia/proyecto-1-ci5437/src/L_informe/informe.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 338.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 338.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 342.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 342.
 Package rerunfilecheck Info: File `informe.out' has not changed.
 (rerunfilecheck)             Checksum: 02A06F7755F21E75D7493D92129236C9;574.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 338.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 342.
  ) 
 Here is how much of TeX's memory you used:
- 5856 strings out of 494561
- 87314 string characters out of 6177454
+ 5857 strings out of 494561
+ 87320 string characters out of 6177454
  188191 words of memory out of 5000000
  9434 multiletter control sequences out of 15000+600000
  13122 words of font info for 33 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  28i,7n,28p,268b,452s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/bookman/ubkd8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/bookman/ubkl8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/bookman/ubkli8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb>
-Output written on /home/amin/Desktop/Inteligencia/proyecto-1-ci5437/src/L_informe/informe.pdf (5 pages, 162100 bytes).
+Output written on /home/amin/Desktop/Inteligencia/proyecto-1-ci5437/src/L_informe/informe.pdf (5 pages, 162325 bytes).
 PDF statistics:
- 117 PDF objects out of 1000 (max. 8388607)
- 96 compressed objects within 1 object stream
- 23 named destinations out of 1000 (max. 500000)
+ 118 PDF objects out of 1000 (max. 8388607)
+ 97 compressed objects within 1 object stream
+ 24 named destinations out of 1000 (max. 500000)
  96 words of extra memory for PDF output out of 10000 (max. 10000000)
 

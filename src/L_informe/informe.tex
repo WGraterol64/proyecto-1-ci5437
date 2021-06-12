@@ -279,6 +279,10 @@
       \verb|<VALUE>| es el costo m\'inimo desde el estado \verb|<STATE>| hacia el estado 
       objetivo. Este output es almacenado en un archivo \verb|.pdb| que puede llegar a 
       ser muy pesado.
+      \item Eliminar el archivo \verb|.c| y \verb|.psvn| abstraido y luego copiar y 
+      pegar el \verb|.psvn| original en el directorio actual. La raz\'on de hacer esto 
+      es que para compilar el siguiente archivo necesitamos usar el psvn con las reglas 
+      y estados originales.
       \item Compilar el archivo \verb|make_state_map| creado por nosotros el cual 
       inicializa una variable del tipo \verb|state_map_t| proporcionado por la API, y 
       por cada l\'inea del archivo \verb|.pdb| almacena en dicha variable el estado y 
