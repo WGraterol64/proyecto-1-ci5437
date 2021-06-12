@@ -10,8 +10,6 @@ CXX = g++
 	make $*.c
 	$(CXX) $(OPT) $(ROOT)/global/dist.cpp -include $*.c -o ./$*.dist
 	./$*.dist > $*.pdb
-	$(CXX) $(OPT) ./src/make_state_map.cpp --include $*.c -o ./make_state_map_$*.out 
-	./make_state_map_$*.out $*.pdb $*.state_map
 	make clean
 
 %.out:
@@ -30,6 +28,6 @@ psvn2c_abstraction.c:
 	$(ROOT)/bin/psvn2c $(PSVNOPT) --name=$* < $*.psvn > $@
 
 clean:
-	rm -f *.c *.abst *.psvn *.out *.pdb *.dist
+	rm -f *.c *.abst *.psvn *.out *.dist
 
 
