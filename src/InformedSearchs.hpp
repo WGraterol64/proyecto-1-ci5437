@@ -8,6 +8,10 @@
 #include <map>
 #include <iostream>
 #include <bits/stdc++.h>
+#include <signal.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
 #include "sys/types.h"
 #include "sys/sysinfo.h"
 
@@ -19,6 +23,10 @@ using namespace std;
 
 // Imprime la memoria virtual (ram y swap) usada actualmente.
 void print_memory_used(void);
+
+void handler_ctrl_c(int s);
+
+void set_handler(void);
 
 // Busqueda de mejor camino.
 Node *best_first_search(

@@ -50,6 +50,31 @@ void print_time(void) {
 }
 
 /*
+  Imprime los resultados actuales y finaliza la ejecucion.
+*/
+void handler_ctrl_c(int s){
+  // Imprimimos la cantidad de nodos expandidos por profundidad y la 
+  // memoria virtual usada.
+  cout << "Not solution found.\n";
+  print_time();
+  cout << "Final memory: ";
+  print_memory_used();
+  print_visited();
+  exit(1); 
+}
+
+/*
+  Para poder parar la ejecucion.
+*/
+void set_handler(void) {
+  struct sigaction sigIntHandler;
+  sigIntHandler.sa_handler = handler_ctrl_c;
+  sigemptyset(&sigIntHandler.sa_mask);
+  sigIntHandler.sa_flags = 0;
+  sigaction(SIGINT, &sigIntHandler, NULL);
+}
+
+/*
   Aplica una regla forward sobre un estado y almacena el resultado en el 
   mismo estado.
 */

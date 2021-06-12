@@ -1,8 +1,8 @@
 # Fdb version 3
-["pdflatex"] 1623508728 "/home/amin/Desktop/Inteligencia/proyecto-1-ci5437/src/L_informe/informe.tex" "/home/amin/Desktop/Inteligencia/proyecto-1-ci5437/src/L_informe/informe.pdf" "informe" 1623508732
+["pdflatex"] 1623514992 "/home/amin/Desktop/Inteligencia/proyecto-1-ci5437/src/L_informe/informe.tex" "/home/amin/Desktop/Inteligencia/proyecto-1-ci5437/src/L_informe/informe.pdf" "informe" 1623515001
   "/etc/texmf/web2c/texmf.cnf" 1613085870 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/amin/Desktop/Inteligencia/proyecto-1-ci5437/src/L_informe/informe.aux" 1623508731 1850 d76f64ae4ff3a60a908651e59f0eb4cc ""
-  "/home/amin/Desktop/Inteligencia/proyecto-1-ci5437/src/L_informe/informe.tex" 1623508725 17195 58eba950948e7fe2a2f5add1ca40f42a ""
+  "/home/amin/Desktop/Inteligencia/proyecto-1-ci5437/src/L_informe/informe.aux" 1623514996 2953 befe65a2d03fd0abe94569ad6c5000f4 ""
+  "/home/amin/Desktop/Inteligencia/proyecto-1-ci5437/src/L_informe/informe.tex" 1623514985 17580 1717206059392401fd2330526aa46cb6 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/bookman/pbkd7t.tfm" 1480098688 1828 e7f8907b15e46b672fb146aef572259e ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/bookman/pbkd8r.tfm" 1480098688 2652 fbb260af94169655e2163df863ca2995 ""
@@ -71,13 +71,13 @@
   "15puzzle_easy.png" 1623022548 34464 1b1e54024c6704bd6f8163630b2680da ""
   "15puzzle_hard.png" 1623036629 26432 72c4ff658a01e2b8d8d3284167464a96 ""
   "15puzzle_medium.png" 1623027753 27264 bfb06e3dd4310ab6333b2be36ffa46b1 ""
-  "informe.aux" 1623508731 1850 d76f64ae4ff3a60a908651e59f0eb4cc ""
-  "informe.out" 1623508731 574 02a06f7755f21e75d7493d92129236c9 ""
-  "informe.tex" 1623508725 17195 58eba950948e7fe2a2f5add1ca40f42a ""
+  "informe.aux" 1623514996 2953 befe65a2d03fd0abe94569ad6c5000f4 ""
+  "informe.out" 1623514996 1221 58b613d430b59b01c86cbb7624931a46 ""
+  "informe.tex" 1623514985 17580 1717206059392401fd2330526aa46cb6 ""
   (generated)
   "informe.pdf"
-  "/home/amin/Desktop/Inteligencia/proyecto-1-ci5437/src/L_informe/informe.log"
-  "informe.log"
-  "/home/amin/Desktop/Inteligencia/proyecto-1-ci5437/src/L_informe/informe.pdf"
-  "informe.out"
   "informe.aux"
+  "/home/amin/Desktop/Inteligencia/proyecto-1-ci5437/src/L_informe/informe.pdf"
+  "informe.log"
+  "informe.out"
+  "/home/amin/Desktop/Inteligencia/proyecto-1-ci5437/src/L_informe/informe.log"

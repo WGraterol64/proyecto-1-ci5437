@@ -7,6 +7,8 @@ unsigned (*h) (state_t*);
 unsigned f(Node *node) { return node->g + h(node->state); }
 
 int main(void) {
+  // Agregamos el manejador de interrupciones.
+  set_handler();
   // Imprimimos la memoria virtual inicial.
   cout << "Initial memory: ";
   print_memory_used();
