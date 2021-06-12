@@ -466,6 +466,7 @@ unsigned pdb_rubik(state_t *state) {
     // Agregamos el valor del estado abstraido.
     h_value = f(h_value, (unsigned) *state_map_get(*it, state_abs));
   }
+  cout << "VALUE: " << h_value << "\n";
   free(state_str);
   return h_value;
 }
