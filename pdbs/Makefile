@@ -10,7 +10,7 @@ CXX = g++
 	make $*.c
 	$(CXX) $(OPT) $(ROOT)/global/dist.cpp -include $*.c -o ./$*.dist
 	./$*.dist > $*.pdb
-	rm $*.c 
+	rm $*.c $*.psvn
 	cp $(PUZZLES)/$*.psvn .
 	make $*.c
 	$(CXX) $(OPT) ./src/make_state_map.cpp --include $*.c -o ./make_state_map_$*.out 
