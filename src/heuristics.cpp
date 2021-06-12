@@ -78,6 +78,38 @@ void set_max(void) { f = max_h; }
 
 void set_sum(void) { f = sum_h; }
 
+void add_state(state_map_t *state_map, char *entry) {
+  // Obtenemos la representacion del estado en char*.
+  char s[MAX_STATE_LEN];
+  char *value, *state_str;
+  state_t *state = new state_t;
+
+  strcpy(s, entry);
+
+  // Obtenemos el valor y estado.
+  value = strtok_r(s, " ", &state_str);
+  read_state(state_str, state);
+  
+  // Agregamos el estado al map.
+  state_map_add(state_map, state, atoi(value));
+  delete state;
+}
+
+state_map_t* make_state_map(FILE *pdb_file) {
+  state_map_t *state_map = new_state_map();
+
+  char *line = NULL;
+  size_t len = 0;
+
+  // Leemos linea por linea y cada entrada la agregamos al map.
+  while (getline(&line, &len, pdb_file) != -1) {
+    add_state(state_map, line);
+  }
+  fclose(f);
+
+  return state_map;
+}
+
 /* Inicializa los pdbs que se usaran en la heuristica. */
 void init_pdbs(char *dir_name) {
   DIR *dir;
@@ -97,7 +129,7 @@ void init_pdbs(char *dir_name) {
         sprintf(path, "%s/%s", dir_name, pdb_file->d_name);
         cout << "Opening " << path << "\n";
         f = fopen(path, "r");
-        pdbs.push_back(read_state_map(f));
+        pdbs.push_back(make_state_map(f));
       }
     }
     closedir(dir);

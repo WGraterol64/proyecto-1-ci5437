@@ -22,6 +22,12 @@ void add_state(state_map_t *state_map, char *entry) {
   delete state;
 }
 
+void test_map(char *state_str, state_map_t *state_map) {
+  state_t *state = new state_t;
+  read_state(state_str, state);
+  cout << "TEST: " << state_map_get(state_map, state);
+}
+
 int main(int argc, char **argv) {
   FILE *f;
   if ((f = fopen(argv[1], "r")) == NULL) {
