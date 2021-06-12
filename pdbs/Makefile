@@ -6,7 +6,7 @@ CXX = g++
 
 %:  
 	make abstractor.out
-	./abstractor.out $(PUZZLES)/$*.psvn $* < ./src/abstraction > /dev/null
+	./abstractor.out $(PUZZLES)/$*.psvn $* < ./abstractions/abstraction > /dev/null
 	make $*.c
 	$(CXX) $(OPT) $(ROOT)/global/dist.cpp -include $*.c -o ./$*.dist
 	./$*.dist > $*.pdb

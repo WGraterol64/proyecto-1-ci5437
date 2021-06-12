@@ -327,7 +327,7 @@ char *make_state_abs_rubik(char *state, pair<bool, vector<string>> block) {
         }
       }
       if (! find) {
-        state_abs += "0";
+        state_abs += "N";
       }
     } else {
       state_abs += "0";
@@ -466,7 +466,6 @@ unsigned pdb_rubik(state_t *state) {
     // Agregamos el valor del estado abstraido.
     h_value = f(h_value, (unsigned) *state_map_get(*it, state_abs));
   }
-  cout << "VALUE: " << h_value << "\n";
   free(state_str);
   return h_value;
 }
