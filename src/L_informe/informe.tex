@@ -199,8 +199,36 @@
     \end{figure*}
     
   \subsection{24 Puzzle}
+    \begin{verbatim} 
+    STATE: 10 3 6 13 1 2 20 14 18 11 15 7 5 12 9 24 17 22 4 8 21 23 19 16 B
+    |           FUNCTION|   TIME (SEC)|  MEMORY (GB)|       NODES/SEC|    SOL-LEN|
+    |         A* pruning|   897.386741|      3.19858|      6539.83364|         -1|
+    |    A* late pruning|   891.836721|      3.21017|       8522.0734|         -1|
+    |       IDA* pruning|   890.960517|      1.93535|     34630.35501|         -1|
+    |  IDA* part pruning|   888.734748|      2.75847|     17620.50267|         -1|
+
+    \end{verbatim} 
+    \begin{figure*}[h!]
+      \centering
+      \includegraphics[scale=0.6]{24puzzle.png}
+      \\
+      \small{\textit{Figure 2:}}
+    \end{figure*}
 
   \subsection{Towers of Hanoi 4 Pegs - 12 Disks}
+    \begin{verbatim}
+    |           FUNCTION|   TIME (SEC)|  MEMORY (GB)|       NODES/SEC|    SOL-LEN|
+    |         A* pruning|   114.889752|      1.20013|     20380.81691|         45|
+    |    A* late pruning|   307.716818|      1.12353|      35248.5934|         45|
+    |       IDA* pruning|   899.015214|      0.01519|     87567.69827|         -1|
+    |  IDA* part pruning|   898.956616|      0.00625|     45462.59438|         -1|
+    \end{verbatim}
+    \begin{figure*}[h!]
+      \centering
+      \includegraphics[scale=0.6]{hanois12D.png}
+      \\
+      \small{\textit{Figure 3:}}
+    \end{figure*}
 
   \subsection{Towers of Hanoi 4 Pegs - 14 Disks}
 
