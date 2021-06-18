@@ -8,7 +8,7 @@ using namespace std;
 vector<unsigned> n_visited;
 uint64_t n_nodes = 0;
 // Promedio del factor de ramificacion.
-float prom = 0;
+double prom = 0;
 
 /*
   Imprimimos el resumen del arbol de busqueda.
@@ -87,11 +87,11 @@ int main(int argc, char** argv) {
     while( (ruleid = next_ruleid(&iter) ) >= 0 ) {
       state = new state_t;
       apply_bwd_rule(ruleid, p.second, state);
-      n_pred++;
 
       // Si estamos podando duplicados y ya visitamos el nodo.
       if (pruning) { hash_value = hash_state(state); }
       if (! pruning || (visited.count(hash_value) == 0)) {
+        n_pred++;
         if (pruning) { visited.insert(hash_value); }
         open.push({p.first + 1, state});
       } else { delete state; }

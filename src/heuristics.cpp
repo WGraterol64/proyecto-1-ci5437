@@ -27,18 +27,16 @@ vector<vector<int>> partition_24puzzle = {
 
 // Almacenara la particion que se usara para las torres de hanoi.
 pair<int,int> *partition_hanois;
-pair<int,int> partition_hanois12D[2] = {
-  {0, 23},
-  {24, 47}
+pair<int,int> partition_hanois12D[1] = {
+  {0, 47}
 };
 pair<int,int> partition_hanois14D[2] = {
-  {0, 27},
-  {28, 55}
+  {0, 47},
+  {8, 55}
 };
-pair<int,int> partition_hanois18D[3] = {
-  {0, 23},
-  {24, 47},
-  {48, 71}
+pair<int,int> partition_hanois18D[2] = {
+  {0, 47},
+  {24, 71}
 };
 
 // Almacenara la particion que se usara para top spin.
