@@ -34,25 +34,24 @@ pair<int,int> partition_hanois14D[2] = {
   {0, 47},
   {8, 55}
 };
-pair<int,int> partition_hanois18D[2] = {
+pair<int,int> partition_hanois18D[3] = {
   {0, 47},
+  {8, 55},
   {24, 71}
 };
 
 // Almacenara la particion que se usara para top spin.
 pair<int,int> *partition_topspin;
 pair<int,int> partition_topspin12[2] = {
-  {1, 6},
-  {7, 12}
+  {1, 12}
 };
 pair<int,int> partition_topspin14[2] = {
-  {1, 7},
-  {8, 14}
+  {1, 12},
+  {3, 14}
 };
 pair<int,int> partition_topspin17[3] = {
-  {1, 6},
-  {7, 12},
-  {13, 17}
+  {1, 12},
+  {6, 17}
 };
 
 // Almacena la particion del cubo de rubik.

@@ -27,9 +27,9 @@ X0 X1 X2 X3 -  -  -  -  -  -  -  -  -  -   =>  X3 X2 X1 X0 -  -  -  -  -  -  -  
 -  -  -  -  -  -  -  X0 X1 X2 X3 -  -  -   =>  -  -  -  -  -  -  -  X3 X2 X1 X0 -  -  -    LABEL R7_10 
 -  -  -  -  -  -  -  -  X0 X1 X2 X3 -  -   =>  -  -  -  -  -  -  -  -  X3 X2 X1 X0 -  -    LABEL R8_11 
 -  -  -  -  -  -  -  -  -  X0 X1 X2 X3 -   =>  -  -  -  -  -  -  -  -  -  X3 X2 X1 X0 -    LABEL R9_12 
--  -  -  -  -  -  -  -  -  -  X0 X1 X2 X3  =>  -  -  -  -  -  -  -  -  -  -  X3 X2 X1 X0   LABEL R10_13 
-X3 -  -  -  -  -  -  -  -  -  -  X0 X1 X2  =>  X0 -  -  -  -  -  -  -  -  -  -  X3 X2 X1   LABEL R11_0 
-X2 X3 -  -  -  -  -  -  -  -  -  -  X0 X1  =>  X1 X0 -  -  -  -  -  -  -  -  -  -  X3 X2   LABEL R12_1 
-X1 X2 X3 -  -  -  -  -  -  -  -  -  -  X0  =>  X2 X1 X0 -  -  -  -  -  -  -  -  -  -  X3   LABEL R13_2 
+T1 T2 T3 T4 T5 T6 T7 T8 T9 T10 X1 X2 X3 X4 => X3 X2 X1 T1 T2 T3 T4 T5 T6 T7 T8 T9 T10 X4   LABEL REVAT10
+X4 T1 T2 T3 T4 T5 T6 T7 T8 T9 T10 X1 X2 X3 => X2 X1 T1 T2 T3 T4 T5 T6 T7 T8 T9 T10 X4 X3   LABEL REVAT11
+X3 X4 T1 T2 T3 T4 T5 T6 T7 T8 T9 T10 X1 X2 => X1 T1 T2 T3 T4 T5 T6 T7 T8 T9 T10 X4 X3 X2   LABEL REVAT12
+X2 X3 X4 T1 T2 T3 T4 T5 T6 T7 T8 T9 T10 X1 => T1 T2 T3 T4 T5 T6 T7 T8 T9 T10 X4 X3 X2 X1   LABEL REVAT13
 
 GOAL 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
