@@ -34,9 +34,8 @@ pair<int,int> partition_hanois14D[2] = {
   {0, 47},
   {8, 55}
 };
-pair<int,int> partition_hanois18D[3] = {
+pair<int,int> partition_hanois18D[2] = {
   {0, 47},
-  {8, 55},
   {24, 71}
 };
 
@@ -46,19 +45,19 @@ pair<int,int> partition_topspin12[2] = {
   {1, 12}
 };
 pair<int,int> partition_topspin14[2] = {
-  {1, 12},
-  {3, 14}
+  {1, 8},
+  {7, 14}
 };
 pair<int,int> partition_topspin17[3] = {
-  {1, 12},
-  {6, 17}
+  {1, 7},
+  {6, 12},
+  {11, 17}
 };
 
 // Almacena la particion del cubo de rubik.
 pair<bool, vector<string>> partition_rubik[6] = {
-  {true, {"R", "G"}},
-  {true, {"B", "Y"}},
-  {true, {"O", "W"}},
+  {true, {"R", "G", "Y"}},
+  {true, {"B", "O", "W"}},
   {false,  {"R", "G"}},
   {false,  {"B", "Y"}},
   {false,  {"O", "W"}}
